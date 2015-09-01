@@ -1,0 +1,18 @@
+<div id="metadata_items_template">
+    <!-- ko template: { name: 'metadata_item_template', foreach: $data } -->
+
+    <!--/ko -->
+</div>
+
+<div id="metadata_item_template">
+    <!-- ko template: $data.template || $data.type + '_template' -->
+    <!-- /ko -->
+</div>
+
+<div id="metadata_default_template">
+    <div data-bind="text: JSON.stringify($data)"></div>
+</div>
+
+<div id="metadata_loading_template">
+    Loading
+</div>

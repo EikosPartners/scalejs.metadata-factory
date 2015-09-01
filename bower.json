@@ -1,0 +1,21 @@
+{
+  "name": "scalejs.metadata-factory",
+  "version": "0.0.0",
+  "homepage": "",
+  "authors": [
+  ],
+  "description": "",
+  "main": [
+    "dist/scalejs.metadata-factory.min.js"
+  ],
+  "ignore": [
+    "*", "!dist/*.js"
+  ],
+  "dependencies": {
+    "scalejs": "lisovin/scalejs"
+  },
+  "devDependencies": {
+    "requirejs": "latest"
+  }
+}
+
