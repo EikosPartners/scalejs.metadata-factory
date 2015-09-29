@@ -7,14 +7,14 @@ var require = {
     ]
   },
   paths: {
-    requirejs: '../lib/requirejs/require',
-    scalejs: '../lib/scalejs/dist/scalejs.min',
-    'scalejs.mvvm.views': '../lib/scalejs.mvvm/dist/scalejs.mvvm',
-    knockout: '../lib/knockout/dist/knockout',
-    'scalejs.mvvm': '../lib/scalejs.mvvm/dist/scalejs.mvvm',
-    'knockout.mapping': '../lib/knockout.mapping/knockout.mapping',
-    'scalejs.functional': '../lib/scalejs.functional/dist/scalejs.functional.min',
-    text: '../lib/text/text'
+    requirejs: '../bower_components/requirejs/require',
+    scalejs: '../bower_components/scalejs/dist/scalejs.min',
+    'scalejs.mvvm.views': '../bower_components/scalejs.mvvm/dist/scalejs.mvvm',
+    knockout: '../bower_components/knockout/dist/knockout',
+    'scalejs.mvvm': '../bower_components/scalejs.mvvm/dist/scalejs.mvvm',
+    'knockout.mapping': '../bower_components/knockout.mapping/knockout.mapping',
+    'scalejs.functional': '../bower_components/scalejs.functional/dist/scalejs.functional.min',
+    text: '../bower_components/text/text'
   },
   packages: [
 
