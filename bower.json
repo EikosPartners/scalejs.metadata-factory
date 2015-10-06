@@ -1,6 +1,6 @@
 {
   "name": "scalejs.metadata-factory",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "",
   "authors": [
   ],
@@ -13,7 +13,7 @@
   ],
   "dependencies": {
     "scalejs": "lisovin/scalejs",
-    "scalejs.mvvm": "lisovin/scalejs.mvvm#dev"
+    "scalejs.mvvm": "lisovin/scalejs.mvvm"
   },
   "devDependencies": {
     "requirejs": "latest"
