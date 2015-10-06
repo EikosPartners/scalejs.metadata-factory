@@ -13,7 +13,7 @@
   ],
   "dependencies": {
     "scalejs": "lisovin/scalejs",
-    "scalejs.mvvm": "lisovin/scalejs.mvvm"
+    "scalejs.mvvm": "EikosPartners/scalejs.mvvm"
   },
   "devDependencies": {
     "requirejs": "latest"
