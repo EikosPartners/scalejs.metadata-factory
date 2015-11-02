@@ -1,37 +1,43 @@
 define([
     'scalejs!core',
     'knockout',
-    'scalejs.mvvm.views!scalejs.metadata-factory/metadata-factory'
+    'text!scalejs.metadata-factory/metadata-factory.html'
 ], function (
     core,
-    ko
+    ko,
+    view
 ) {
     'use strict';
+
+    core.mvvm.registerTemplates(view);
 
     var has = core.object.has,
         viewModels = {
             '': defaultViewModel,
-            template: templateViewModel,
             context: contextViewModel
         },
         useDefault = true;
 
     function createViewModel(node) {
         if(!this || !this.metadata) {
-            console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
+            //console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
         }
-        var mappedNode = viewModels[node.type] ? viewModels[node.type].call(this, node) : defaultViewModel.call(this, node);
-        if (mappedNode) {
-            mappedNode.type = mappedNode.type || node.type;
+        if (node && node.type === 'ignore' ) {
+            console.log('ignored node ', node);
+        } else {
+            var mappedNode = viewModels[node.type] ? viewModels[node.type].call(this, node) : defaultViewModel.call(this, node);
+            if (mappedNode) {
+                mappedNode.type = mappedNode.type || node.type;
+            }
+            return mappedNode;
         }
-        return mappedNode;
     }
 
     function createViewModels(metadata) {
         var metadataContext;
 
         if(!this || !this.metadata) {
-            console.warn('A new instance of metadata has been detected, therefore a new context will be created');
+            //console.warn('A new instance of metadata has been detected, therefore a new context will be created');
         }
 
         // allows all viewmodels created in the same instane of metadata
@@ -41,20 +47,14 @@ define([
         } else {
             metadataContext = {
                 metadata: metadata
-            }
-            // remembering to call these functions from this is bad
-            // if parent forgot to do it, then this will be undefined, which is messy
-            // better for the parent to explicitly bind the func from the sandbox
-            
-            //metadataContext.createViewModels = createViewModels.bind(metadataContext);
-            //metadataContext.createViewModel = createViewModel.bind(metadataContext);
+            };
         }
 
         return metadata.map(function (item) {
             return createViewModel.call(metadataContext, item)
-        }).filter(function (vm) { 
+        }).filter(function (vm) {
             // filter undefined or null from the viewmodels array
-            return has(vm); 
+            return has(vm);
         });
     }
 
@@ -84,17 +84,6 @@ define([
         core.object.extend(this, node);
     }
 
-    function templateViewModel(node) {
-        // aside from mapping child nodes, no viewmodel is necessary for a template
-        // templates pass the node along, as well as mappedChildNodes for compatibility
-        // this way we can write templates and bindings without having to always write a new vm
-        var mappedChildNodes = createViewModels(node.children || []);
-
-        return core.object.merge(node, {
-            mappedChildNodes: mappedChildNodes
-        });
-    }
-
     function registerViewModels(newViewModels) {
         core.object.extend(viewModels, newViewModels);
     }
@@ -121,18 +110,20 @@ define([
             bindingContext
         ) {
 
-            var metadata = ko.unwrap(valueAccessor()),
-                metadataTemplate = createTemplate(metadata).template,
-                prevMetadata = ko.utils.domData.get(element, 'metadata');
+            var metadata = ko.unwrap(valueAccessor());
 
-            if (prevMetadata) {
-                prevMetadata = Array.isArray(prevMetadata) ? prevMetadata : [prevMetadata];
-                dispose(prevMetadata);
-            }
-
-            ko.utils.domData.set(element,'metadata', metadataTemplate.data);
 
             setTimeout(function () {
+                var metadataTemplate = createTemplate(metadata).template,
+                prevMetadata = ko.utils.domData.get(element, 'metadata');
+
+                if (prevMetadata) {
+                    prevMetadata = Array.isArray(prevMetadata) ? prevMetadata : [prevMetadata];
+                    dispose(prevMetadata);
+                }
+
+                ko.utils.domData.set(element,'metadata', metadataTemplate.data);
+
                 ko.bindingHandlers.template.update(
                     element,
                     function () {
@@ -154,6 +145,7 @@ define([
             createViewModels: createViewModels,
             createViewModel: createViewModel,
             useDefault: useDefault
+
         }
     });
 });
