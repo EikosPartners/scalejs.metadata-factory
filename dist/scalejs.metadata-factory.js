@@ -1,6 +1,6 @@
 
 
-define('text!scalejs.metadata-factory/metadata-factory.html',[],function () { return '<div id="metadata_items_template">\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\n\n    <!--/ko -->\n</div>\n\n<div id="metadata_item_template">\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n</div>\n\n<div id="metadata_default_template">\n    <div data-bind="text: JSON.stringify($data)"></div>\n</div>\n\n<div id="metadata_loading_template">\n    <div class="loader hexdots-loader">\n    loading...\n    </div>\n</div>\n';});
+define('text!scalejs.metadata-factory/metadata-factory.html',[],function () { return '<div id="metadata_items_template">\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\n\n    <!--/ko -->\n</div>\n\n<div id="metadata_item_template">\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n</div>\n\n<div id="metadata_default_template">\n    <div data-bind="text: JSON.stringify($data)"></div>\n</div>\n\n<div id="metadata_loading_template">\n    <div class="loader hexdots-loader">\n    loading...\n    </div>\n</div>';});
 
 define([
     'scalejs!core',
@@ -15,7 +15,7 @@ define([
     'use strict';
 
     core.mvvm.registerTemplates(view);
-
+    
     var has = core.object.has,
         viewModels = {
             '': defaultViewModel,
@@ -115,17 +115,23 @@ define([
             bindingContext
         ) {
 
-            var metadata = ko.unwrap(valueAccessor());
+            var metadata = ko.unwrap(valueAccessor()),
+                prevMetadata;
 
-
-            setTimeout(function () {
-                var metadataTemplate = createTemplate(metadata).template,
+            function disposeMetadata() {
                 prevMetadata = ko.utils.domData.get(element, 'metadata');
 
                 if (prevMetadata) {
                     prevMetadata = Array.isArray(prevMetadata) ? prevMetadata : [prevMetadata];
                     dispose(prevMetadata);
                 }
+            }
+
+
+            setTimeout(function () {
+                var metadataTemplate = createTemplate(metadata).template;
+
+                disposeMetadata();
 
                 ko.utils.domData.set(element,'metadata', metadataTemplate.data);
 
@@ -138,6 +144,13 @@ define([
                     viewModel,
                     bindingContext
                 );
+
+                // first time running - set dom node disposal
+                if (!prevMetadata) {
+                    ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+                        disposeMetadata();
+                    });
+                }
             });
         }
 
@@ -154,5 +167,3 @@ define([
         }
     });
 });
-
-

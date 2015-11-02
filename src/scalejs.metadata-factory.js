@@ -11,7 +11,7 @@ define([
     'use strict';
 
     core.mvvm.registerTemplates(view);
-
+    
     var has = core.object.has,
         viewModels = {
             '': defaultViewModel,
@@ -111,17 +111,23 @@ define([
             bindingContext
         ) {
 
-            var metadata = ko.unwrap(valueAccessor());
+            var metadata = ko.unwrap(valueAccessor()),
+                prevMetadata;
 
-
-            setTimeout(function () {
-                var metadataTemplate = createTemplate(metadata).template,
+            function disposeMetadata() {
                 prevMetadata = ko.utils.domData.get(element, 'metadata');
 
                 if (prevMetadata) {
                     prevMetadata = Array.isArray(prevMetadata) ? prevMetadata : [prevMetadata];
                     dispose(prevMetadata);
                 }
+            }
+
+
+            setTimeout(function () {
+                var metadataTemplate = createTemplate(metadata).template;
+
+                disposeMetadata();
 
                 ko.utils.domData.set(element,'metadata', metadataTemplate.data);
 
@@ -134,6 +140,13 @@ define([
                     viewModel,
                     bindingContext
                 );
+
+                // first time running - set dom node disposal
+                if (!prevMetadata) {
+                    ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+                        disposeMetadata();
+                    });
+                }
             });
         }
 
@@ -150,4 +163,3 @@ define([
         }
     });
 });
-
