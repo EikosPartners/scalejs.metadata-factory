@@ -5,8 +5,8 @@ define('text!scalejs.metadata-factory/metadata-factory.html',[],function () { re
 define([
     'scalejs!core',
     'knockout',
-    'text!scalejs.metadata-factory/metadata-factory.html'
-    // 'views!extensions/scalejs.metadata-factory/metadata-factory.html'
+    'text!scalejs.metadata-factory/metadata-factory.html',
+    'scalejs.mvvm'
 ], function (
     core,
     ko,
