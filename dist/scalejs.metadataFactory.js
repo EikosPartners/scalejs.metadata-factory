@@ -1,11 +1,11 @@
 
 
-define('text!scalejs.metadata-factory/metadata-factory.html',[],function () { return '<div id="metadata_items_template">\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\n\n    <!--/ko -->\n</div>\n\n<div id="metadata_item_template">\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n</div>\n\n<div id="metadata_default_template">\n    <div data-bind="text: JSON.stringify($data)"></div>\n</div>\n\n<div id="metadata_loading_template">\n    <div class="loader hexdots-loader">\n    loading...\n    </div>\n</div>';});
+define('text!scalejs.metadataFactory/metadataFactory.html',[],function () { return '<div id="metadata_items_template">\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\n\n    <!--/ko -->\n</div>\n\n<div id="metadata_item_template">\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n</div>\n\n<div id="metadata_default_template">\n    <div data-bind="text: JSON.stringify($data)"></div>\n</div>\n\n<div id="metadata_loading_template">\n    <div class="loader hexdots-loader">\n    loading...\n    </div>\n</div>';});
 
 define([
     'scalejs!core',
     'knockout',
-    'text!scalejs.metadata-factory/metadata-factory.html',
+    'text!scalejs.metadataFactory/metadataFactory.html',
     'scalejs.mvvm'
 ], function (
     core,

@@ -1,12 +1,12 @@
 {
-  "name": "scalejs.metadata-factory",
-  "version": "0.0.6",
+  "name": "scalejs.metadataFactory",
+  "version": "0.0.7",
   "homepage": "",
   "authors": [
   ],
   "description": "",
   "main": [
-    "dist/scalejs.metadata-factory.js"
+    "dist/scalejs.metadataFactory.js"
   ],
   "ignore": [
     "*", "!dist/*.js" 

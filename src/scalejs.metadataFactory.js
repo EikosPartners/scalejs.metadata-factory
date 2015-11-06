@@ -1,7 +1,7 @@
 define([
     'scalejs!core',
     'knockout',
-    'text!scalejs.metadata-factory/metadata-factory.html',
+    'text!scalejs.metadataFactory/metadataFactory.html',
     'scalejs.mvvm'
 ], function (
     core,

@@ -3,7 +3,7 @@ require.config({
         boot: '../lib/jasmine/boot',
         'jasmine-html': '../lib/jasmine/jasmine-html',
         jasmine: '../lib/jasmine/jasmine',
-        'scalejs.metadata-factory': '../build/scalejs.metadata-factory'
+        'scalejs.metadataFactory': '../build/scalejs.metadataFactory'
     },
     shim: {
         jasmine: {
@@ -25,14 +25,14 @@ require.config({
     },
     scalejs: {
         extensions: [
-            'scalejs.metadata-factory'
+            'scalejs.metadataFactory'
         ]
     }
 });
 
 require(['boot'], function () {
     require ([
-        './scalejs.metadata-factory.test'
+        './scalejs.metadataFactory.test'
     ], function () {
         window.onload();
     });
