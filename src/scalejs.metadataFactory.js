@@ -2,11 +2,14 @@ define([
     'scalejs!core',
     'knockout',
     'text!scalejs.metadataFactory/metadataFactory.html',
+    'scalejs.metadataFactory/action/actionModule',
     'scalejs.mvvm'
+    
 ], function (
     core,
     ko,
-    view
+    view,
+    avm
 ) {
     'use strict';
 
@@ -15,14 +18,15 @@ define([
     var has = core.object.has,
         viewModels = {
             '': defaultViewModel,
-            context: contextViewModel
+            context: contextViewModel,
+            action: avm.action
         },
         useDefault = true;
-
+        
     function createViewModel(node) {
-        if(!this || !this.metadata) {
+        //if(!this || !this.metadata) {
             //console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
-        }
+        //}
         if (node && node.type === 'ignore' ) {
             console.log('ignored node ', node);
         } else {
@@ -37,9 +41,9 @@ define([
     function createViewModels(metadata) {
         var metadataContext;
 
-        if(!this || !this.metadata) {
+        //if(!this || !this.metadata) {
             //console.warn('A new instance of metadata has been detected, therefore a new context will be created');
-        }
+        //}
 
         // allows all viewmodels created in the same instane of metadata
         // to share context (as long as createViewModels is called correctly)
@@ -151,15 +155,17 @@ define([
         }
 
     }
-
-    core.registerExtension({
-        metadataFactory: {
+    var metadatafactory = { metadataFactory: {
             createTemplate: createTemplate,
             registerViewModels: registerViewModels,
             createViewModels: createViewModels,
             createViewModel: createViewModel,
-            useDefault: useDefault
-
-        }
-    });
+            useDefault: useDefault,
+            registerAction : avm.registerAction,
+            registerActions: avm.registerActions,
+            getRegisteredActions: avm.getRegisteredActions
+    }};
+    
+    core.registerExtension(metadatafactory);
+    return metadatafactory;
 });

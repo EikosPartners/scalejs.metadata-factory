@@ -12,8 +12,10 @@
     "*", "!dist/*.js" 
   ],
   "dependencies": {
+    "almond": "latest",
     "scalejs": "lisovin/scalejs",
-    "scalejs.mvvm": "EikosPartners/scalejs.mvvm"
+    "scalejs.mvvm": "EikosPartners/scalejs.mvvm",
+    "scalejs.ajax-jquery": "EikosPartners/scalejs.ajax-jquery"
   },
   "devDependencies": {
     "requirejs": "latest"
