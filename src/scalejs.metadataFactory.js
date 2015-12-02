@@ -11,7 +11,7 @@ define([
     'use strict';
 
     core.mvvm.registerTemplates(view);
-    
+
     var has = core.object.has,
         viewModels = {
             '': defaultViewModel,
@@ -20,9 +20,9 @@ define([
         useDefault = true;
 
     function createViewModel(node) {
-        if(!this || !this.metadata) {
-            //console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
-        }
+        // if(!this || !this.metadata) {
+        //     console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
+        // }
         if (node && node.type === 'ignore' ) {
             console.log('ignored node ', node);
         } else {
@@ -37,9 +37,9 @@ define([
     function createViewModels(metadata) {
         var metadataContext;
 
-        if(!this || !this.metadata) {
-            //console.warn('A new instance of metadata has been detected, therefore a new context will be created');
-        }
+        // if(!this || !this.metadata) {
+        //     console.warn('A new instance of metadata has been detected, therefore a new context will be created');
+        // }
 
         // allows all viewmodels created in the same instane of metadata
         // to share context (as long as createViewModels is called correctly)
@@ -59,7 +59,7 @@ define([
         });
     }
 
-    function createTemplate(metadata) {
+    function createTemplate(metadata, context) {
         if(!metadata) {
             return core.mvvm.template('metadata_loading_template');
         }
@@ -67,7 +67,7 @@ define([
             metadata = [metadata];
         }
 
-        var viewModels = createViewModels(metadata);
+        var viewModels =  !context ? createViewModels(metadata) : createViewModels.call(context, metadata);
 
         return core.mvvm.template('metadata_items_template', viewModels);
     }
@@ -111,7 +111,9 @@ define([
             bindingContext
         ) {
 
-            var metadata = ko.unwrap(valueAccessor()),
+
+            var metadata = ko.unwrap(valueAccessor()).metadata ? ko.unwrap(valueAccessor()).metadata : ko.unwrap(valueAccessor()),
+                context = ko.unwrap(valueAccessor()).context ? ko.unwrap(valueAccessor()).context : null,
                 prevMetadata;
 
             function disposeMetadata() {
@@ -125,7 +127,7 @@ define([
 
 
             setTimeout(function () {
-                var metadataTemplate = createTemplate(metadata).template;
+                var metadataTemplate = createTemplate(metadata, context).template;
 
                 disposeMetadata();
 
@@ -159,7 +161,6 @@ define([
             createViewModels: createViewModels,
             createViewModel: createViewModel,
             useDefault: useDefault
-
         }
     });
 });

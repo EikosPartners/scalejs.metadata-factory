@@ -1,6 +1,6 @@
 {
   "name": "scalejs.metadataFactory",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "homepage": "",
   "authors": [
   ],
@@ -9,7 +9,7 @@
     "dist/scalejs.metadataFactory.js"
   ],
   "ignore": [
-    "*", "!dist/*.js" 
+    "*", "!dist/*.js"
   ],
   "dependencies": {
     "scalejs": "lisovin/scalejs",
