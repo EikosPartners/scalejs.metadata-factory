@@ -29,7 +29,8 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
     'knockout',
     'text!scalejs.metadataFactory/action/views/action.html',
     'scalejs.metadataFactory/action/bindings/actionBindings.js',
-    'scalejs.reactive'
+    'scalejs.reactive',
+    'scalejs.mvvm'
 ], function (
     core,
     ko,
