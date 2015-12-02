@@ -61,7 +61,7 @@ define([
                     options: options
                 });
             } else {
-                actionFunc(options);
+                actionFunc(options, arguments);
             }
         }
 

@@ -86,7 +86,7 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
                     options: options
                 });
             } else {
-                actionFunc(options);
+                actionFunc(options, arguments);
             }
         }
 
