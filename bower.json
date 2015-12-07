@@ -9,7 +9,7 @@
     "dist/scalejs.metadataFactory.js"
   ],
   "ignore": [
-    "*", "!dist/*.js" 
+    "*", "!dist/*.js"
   ],
   "dependencies": {
     "almond": "latest",
