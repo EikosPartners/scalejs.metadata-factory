@@ -35,7 +35,8 @@ requirejs({
     'rx.virtualtime': '../bower_components/rxjs/dist/rx.virtualtime.min',
     'knockout.mapping': '../bower_components/knockout.mapping/knockout.mapping',
     'scalejs.functional': '../bower_components/scalejs.functional/dist/scalejs.functional.min',
-    text: '../bower_components/text/text'
+    text: '../bower_components/text/text',
+    lodash: '../bower_components/lodash/lodash'
   },
   packages: [
 

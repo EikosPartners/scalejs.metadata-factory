@@ -2,26 +2,26 @@
   "name": "scalejs.metadataFactory",
   "version": "0.0.8",
   "homepage": "",
-  "authors": [
-  ],
+  "authors": [],
   "description": "",
   "main": [
     "dist/scalejs.metadataFactory.js"
   ],
   "ignore": [
-    "*", "!dist/*.js"
+    "*",
+    "!dist/*.js"
   ],
   "dependencies": {
     "almond": "latest",
+    "lodash": "~3.10.1",
     "scalejs": "lisovin/scalejs",
-    "scalejs.mvvm": "EikosPartners/scalejs.mvvm",
-    "scalejs.ajax-jquery": "EikosPartners/scalejs.ajax-jquery"
+    "scalejs.ajax-jquery": "EikosPartners/scalejs.ajax-jquery",
+    "scalejs.mvvm": "EikosPartners/scalejs.mvvm"
   },
   "devDependencies": {
     "requirejs": "latest"
   },
-    "resolutions": {
+  "resolutions": {
     "knockout": "~3.3.0"
   }
 }
-

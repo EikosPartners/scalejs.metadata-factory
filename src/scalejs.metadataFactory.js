@@ -3,13 +3,15 @@ define([
     'knockout',
     'text!scalejs.metadataFactory/metadataFactory.html',
     'scalejs.metadataFactory/action/actionModule',
+    'scalejs.metadataFactory/template/templateViewModel',
     'scalejs.mvvm'
     
 ], function (
     core,
     ko,
     view,
-    avm
+    avm,
+    tvm
 ) {
     'use strict';
 
@@ -19,7 +21,8 @@ define([
         viewModels = {
             '': defaultViewModel,
             context: contextViewModel,
-            action: avm.action
+            action: avm.action,
+            template: tvm
         },
         useDefault = true;
         
