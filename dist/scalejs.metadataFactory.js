@@ -42,16 +42,11 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
     var merge = core.object.merge,
         notify = core.reactive.messageBus.notify,
         observable = ko.observable,
-        unwrap = ko.unwrap,
-        isShown = observable(true);
+        unwrap = ko.unwrap;
         
     core.mvvm.registerTemplates(view);
     core.mvvm.registerBindings(binding);
     
-    function eventAction(options) {
-        console.error('Please switch to notify actionType="notify" instead of event', options);
-        notify(unwrap(options.target), options.params);
-    }
     function notifyAction(options) {
         notify(unwrap(options.target), options.params);
     }
@@ -63,11 +58,12 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
             options = node.options || {},
             actionType = node.actionType,
             actions = {
-                notify: notifyAction,
-                event: eventAction,
+                notify: notifyAction
             },
             mergedActions = core.object.extend(actions, registeredActions),
-            actionFunc = mergedActions[actionType] || null;
+            actionFunc = mergedActions[actionType] || null,
+            isShown = observable(true),
+            context = this;
 
         if (actionFunc) {
             actionFunc = actionFunc.bind(this);
@@ -95,7 +91,8 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
             action: action,
             text: text,
             actionType: actionType,
-            options: options
+            options: options,
+            context: context
         });
     };
 });
@@ -117,18 +114,13 @@ define('scalejs.metadataFactory/action/actionModule',[
     {
         return registeredActions;
     }
-    function registerAction(action)
-    {
-        core.object.extend(registeredActions, action);
-    }
-    
+
     function registerActions(actions)
     {
         core.object.extend(registeredActions, actions);
     }
      
     return {action:  actionViewModel,
-            registerAction: registerAction, 
             registerActions: registerActions,
             getRegisteredActions: getRegisteredActions};
 });
@@ -200,8 +192,8 @@ define('scalejs.metadataFactory',[
     core,
     ko,
     view,
-    avm,
-    tvm
+    actionModule,
+    templateViewModel
 ) {
     'use strict';
 
@@ -211,8 +203,8 @@ define('scalejs.metadataFactory',[
         viewModels = {
             '': defaultViewModel,
             context: contextViewModel,
-            action: avm.action,
-            template: tvm
+            action: actionModule.action,
+            template: templateViewModel
         },
         useDefault = true;
         
@@ -356,9 +348,8 @@ define('scalejs.metadataFactory',[
             createViewModels: createViewModels,
             createViewModel: createViewModel,
             useDefault: useDefault,
-            registerAction : avm.registerAction,
-            registerActions: avm.registerActions,
-            getRegisteredActions: avm.getRegisteredActions
+            registerActions: actionModule.registerActions,
+            getRegisteredActions: actionModule.getRegisteredActions
     }};
     
     core.registerExtension(metadatafactory);

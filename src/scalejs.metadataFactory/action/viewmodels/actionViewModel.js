@@ -17,16 +17,11 @@ define([
     var merge = core.object.merge,
         notify = core.reactive.messageBus.notify,
         observable = ko.observable,
-        unwrap = ko.unwrap,
-        isShown = observable(true);
+        unwrap = ko.unwrap;
         
     core.mvvm.registerTemplates(view);
     core.mvvm.registerBindings(binding);
     
-    function eventAction(options) {
-        console.error('Please switch to notify actionType="notify" instead of event', options);
-        notify(unwrap(options.target), options.params);
-    }
     function notifyAction(options) {
         notify(unwrap(options.target), options.params);
     }
@@ -38,11 +33,12 @@ define([
             options = node.options || {},
             actionType = node.actionType,
             actions = {
-                notify: notifyAction,
-                event: eventAction,
+                notify: notifyAction
             },
             mergedActions = core.object.extend(actions, registeredActions),
-            actionFunc = mergedActions[actionType] || null;
+            actionFunc = mergedActions[actionType] || null,
+            isShown = observable(true),
+            context = this;
 
         if (actionFunc) {
             actionFunc = actionFunc.bind(this);
@@ -70,7 +66,8 @@ define([
             action: action,
             text: text,
             actionType: actionType,
-            options: options
+            options: options,
+            context: context
         });
     };
 });

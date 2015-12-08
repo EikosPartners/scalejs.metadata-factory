@@ -15,18 +15,13 @@ define([
     {
         return registeredActions;
     }
-    function registerAction(action)
-    {
-        core.object.extend(registeredActions, action);
-    }
-    
+
     function registerActions(actions)
     {
         core.object.extend(registeredActions, actions);
     }
      
     return {action:  actionViewModel,
-            registerAction: registerAction, 
             registerActions: registerActions,
             getRegisteredActions: getRegisteredActions};
 });

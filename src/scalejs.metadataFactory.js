@@ -10,8 +10,8 @@ define([
     core,
     ko,
     view,
-    avm,
-    tvm
+    actionModule,
+    templateViewModel
 ) {
     'use strict';
 
@@ -21,8 +21,8 @@ define([
         viewModels = {
             '': defaultViewModel,
             context: contextViewModel,
-            action: avm.action,
-            template: tvm
+            action: actionModule.action,
+            template: templateViewModel
         },
         useDefault = true;
         
@@ -166,9 +166,8 @@ define([
             createViewModels: createViewModels,
             createViewModel: createViewModel,
             useDefault: useDefault,
-            registerAction : avm.registerAction,
-            registerActions: avm.registerActions,
-            getRegisteredActions: avm.getRegisteredActions
+            registerActions: actionModule.registerActions,
+            getRegisteredActions: actionModule.getRegisteredActions
     }};
     
     core.registerExtension(metadatafactory);
