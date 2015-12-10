@@ -2,17 +2,24 @@ define([
     'scalejs!core',
     'knockout',
     'text!scalejs.metadataFactory/metadataFactory.html',
-    'scalejs.mvvm'
+    'userservice',
+    'scalejs.mvvm',
+    'scalejs.expression-jsep'
 ], function (
     core,
     ko,
-    view
+    view,
+    userService
 ) {
     'use strict';
 
     core.mvvm.registerTemplates(view);
 
     var has = core.object.has,
+        is = core.type.is,
+        computed = ko.computed,
+        evaluate = core.expression.evaluate,
+        observable = ko.observable,
         viewModels = {
             '': defaultViewModel,
             context: contextViewModel
@@ -20,6 +27,9 @@ define([
         useDefault = true;
 
     function createViewModel(node) {
+        var rendered = observable(true),
+            context = this;
+        
         // if(!this || !this.metadata) {
         //     console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
         // }
@@ -27,8 +37,25 @@ define([
             console.log('ignored node ', node);
         } else {
             var mappedNode = viewModels[node.type] ? viewModels[node.type].call(this, node) : defaultViewModel.call(this, node);
+            
+                    
+            if (mappedNode && has(node.rendered)) {
+                rendered = is(node.rendered, 'boolean') ? observable(node.rendered)
+                    : computed(function() {
+                        return evaluate(node.rendered, function (id) {
+                            if (context.getValue && has(context.getValue(id))) {
+                                return context.getValue(id);
+                            }
+                            if (id === 'role') {
+                                return userService.role();
+                            }
+                            return '';
+                        })
+                    });
+            }
             if (mappedNode) {
                 mappedNode.type = mappedNode.type || node.type;
+                mappedNode.rendered = rendered;
             }
             return mappedNode;
         }

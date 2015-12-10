@@ -1,22 +1,29 @@
 
 
-define('text!scalejs.metadataFactory/metadataFactory.html',[],function () { return '<div id="metadata_items_template">\r\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\r\n\r\n    <!--/ko -->\r\n</div>\r\n\r\n<div id="metadata_item_template">\r\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id="metadata_default_template">\r\n    <div data-bind="text: JSON.stringify($data)"></div>\r\n</div>\r\n\r\n<div id="metadata_loading_template">\r\n    <div class="loader hexdots-loader">\r\n    loading...\r\n    </div>\r\n</div>';});
+define('text!scalejs.metadataFactory/metadataFactory.html',[],function () { return '<div id="metadata_items_template">\r\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\r\n\r\n    <!--/ko -->\r\n</div>\r\n\r\n<div id="metadata_item_template">\r\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- ko if: rendered -->\r\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id="metadata_default_template">\r\n    <div data-bind="text: JSON.stringify($data)"></div>\r\n</div>\r\n\r\n<div id="metadata_loading_template">\r\n    <div class="loader hexdots-loader">\r\n    loading...\r\n    </div>\r\n</div>';});
 
 define('scalejs.metadataFactory',[
     'scalejs!core',
     'knockout',
     'text!scalejs.metadataFactory/metadataFactory.html',
-    'scalejs.mvvm'
+    'userservice',
+    'scalejs.mvvm',
+    'scalejs.expression-jsep'
 ], function (
     core,
     ko,
-    view
+    view,
+    userService
 ) {
     'use strict';
 
     core.mvvm.registerTemplates(view);
 
     var has = core.object.has,
+        is = core.type.is,
+        computed = ko.computed,
+        evaluate = core.expression.evaluate,
+        observable = ko.observable,
         viewModels = {
             '': defaultViewModel,
             context: contextViewModel
@@ -24,6 +31,9 @@ define('scalejs.metadataFactory',[
         useDefault = true;
 
     function createViewModel(node) {
+        var rendered = observable(true),
+            context = this;
+        
         // if(!this || !this.metadata) {
         //     console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
         // }
@@ -31,8 +41,25 @@ define('scalejs.metadataFactory',[
             console.log('ignored node ', node);
         } else {
             var mappedNode = viewModels[node.type] ? viewModels[node.type].call(this, node) : defaultViewModel.call(this, node);
+            
+                    
+            if (mappedNode && has(node.rendered)) {
+                rendered = is(node.rendered, 'boolean') ? observable(node.rendered)
+                    : computed(function() {
+                        return evaluate(node.rendered, function (id) {
+                            if (context.getValue && has(context.getValue(id))) {
+                                return context.getValue(id);
+                            }
+                            if (id === 'role') {
+                                return userService.role();
+                            }
+                            return '';
+                        })
+                    });
+            }
             if (mappedNode) {
                 mappedNode.type = mappedNode.type || node.type;
+                mappedNode.rendered = rendered;
             }
             return mappedNode;
         }

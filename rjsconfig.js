@@ -14,7 +14,9 @@ var require = {
     'scalejs.mvvm': '../bower_components/scalejs.mvvm/dist/scalejs.mvvm',
     'knockout.mapping': '../bower_components/knockout.mapping/knockout.mapping',
     'scalejs.functional': '../bower_components/scalejs.functional/dist/scalejs.functional.min',
-    text: '../bower_components/text/text'
+    text: '../bower_components/text/text',
+    userservice: 'empty:',
+    'scalejs.expression-jsep': 'empty:'
   },
   packages: [
 
