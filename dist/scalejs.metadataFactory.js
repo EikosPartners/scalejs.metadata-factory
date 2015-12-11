@@ -113,7 +113,16 @@ define('scalejs.metadataFactory',[
     }
 
     function contextViewModel(node) {
-        core.object.extend(this, node);
+        var newContextProps = {};
+        Object.keys(node).forEach(function (prop) {
+            if (prop === 'type') { return; }
+            if (Array.isArray(node[prop])) {
+                newContextProps[prop] = observableArray(node[prop]);
+            } else {
+                newContextProps[prop] = observable(node[prop]);
+            }
+        });
+        core.object.extend(this, newContextProps);
     }
 
     function registerViewModels(newViewModels) {
