@@ -5,7 +5,7 @@ define([
     'scalejs.metadataFactory/action/actionModule',
     'scalejs.metadataFactory/template/templateViewModel',
     'scalejs.mvvm'
-    
+
 ], function (
     core,
     ko,
@@ -25,7 +25,7 @@ define([
             template: templateViewModel
         },
         useDefault = true;
-        
+
     function createViewModel(node) {
         // if(!this || !this.metadata) {
         //     console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
@@ -106,6 +106,54 @@ define([
         })
     }
 
+    function generateSchema() {
+
+        //Basic schema layout for pjson
+        var schema = {
+            '$schema': 'http://json-schema.org/draft-04/schema#',
+            'definitions':{
+                'template':{'type':'string','enum':[]},
+                'type':{'type':'string','enum':[]},
+                'children':{
+                    'type':'array',
+                    'items':{
+                        'type':'object',
+                        'properties':{
+                            'template':{'$ref':'#/definitions/template'},
+                            'type':{'$ref':'#/definitions/type'},
+                            'children':{'$ref':'#/definitions/children'},
+                            'options':{'$ref': '#/definitions/options'}
+                        }
+                    }
+                },
+                'options':{'type': 'object'},
+                'classes':{ 'type': 'string' }
+            },
+            'type':'object',
+            'properties':{
+                'template':{'$ref':'#/definitions/template'},
+                'type':{'$ref':'#/definitions/type'},
+                'children':{'$ref':'#/definitions/children'},
+                'options':{'$ref': '#/definitions/options'}
+            }
+        };
+        //Add all types to the schema
+        for( var key in viewModels ){
+            if( key !== '' ){
+                schema.definitions.type.enum.push( key );
+            }
+        }
+        //Add all templates to the schema
+        for( var key in core.mvvm.getRegisteredTemplates() ){
+            if( key !== '' ){
+                schema.definitions.template.enum.push( key );
+            }
+        }
+
+        return schema;
+
+    }
+
     ko.bindingHandlers.metadataFactory = {
         init: function () {
             return { controlsDescendantBindings: true };
@@ -167,11 +215,11 @@ define([
             createViewModel: createViewModel,
             useDefault: useDefault,
             registerActions: actionModule.registerActions,
-            getRegisteredActions: actionModule.getRegisteredActions
+            getRegisteredActions: actionModule.getRegisteredActions,
+            generateSchema: generateSchema
     }};
-    
+
     core.registerExtension(metadatafactory);
     return metadatafactory;
 
 });
-
