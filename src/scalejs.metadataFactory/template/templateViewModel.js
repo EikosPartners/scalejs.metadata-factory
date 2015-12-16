@@ -1,11 +1,13 @@
 /*global define, core, _, ko */
 define([
     'scalejs!core',
-    'lodash'
+    'lodash',
+    'knockout'
     
 ], function (
     core,
-    _
+    _,
+    ko
 ) {
     'use strict';
 

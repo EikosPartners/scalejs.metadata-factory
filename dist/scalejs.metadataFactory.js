@@ -127,11 +127,13 @@ define('scalejs.metadataFactory/action/actionModule',[
 /*global define, core, _, ko */
 define('scalejs.metadataFactory/template/templateViewModel',[
     'scalejs!core',
-    'lodash'
+    'lodash',
+    'knockout'
     
 ], function (
     core,
-    _
+    _,
+    ko
 ) {
     'use strict';
 
