@@ -36,7 +36,9 @@ requirejs({
     'knockout.mapping': '../bower_components/knockout.mapping/knockout.mapping',
     'scalejs.functional': '../bower_components/scalejs.functional/dist/scalejs.functional.min',
     text: '../bower_components/text/text',
-    lodash: '../bower_components/lodash/lodash'
+    lodash: '../bower_components/lodash/lodash',
+    userservice: 'empty:',
+    'scalejs.expression-jsep': 'empty:'
   },
   packages: [
 
