@@ -208,6 +208,9 @@ define('scalejs.metadataFactory',[
             action: actionModule.action,
             template: templateViewModel
         },
+        schemas = {
+                
+        },
         useDefault = true;
 
     function createViewModel(node) {
@@ -290,50 +293,71 @@ define('scalejs.metadataFactory',[
         })
     }
 
+    function registerSchema(schema) {
+        for( var key in schema ){
+            if( schemas.hasOwnProperty(key) ){
+                schemas[key] = schema[key];
+            }
+        }
+    }
+
     function generateSchema() {
 
         //Basic schema layout for pjson
         var schema = {
-            '$schema': 'http://json-schema.org/draft-04/schema#',
-            'definitions':{
-                'template':{'type':'string','enum':[]},
-                'type':{'type':'string','enum':[]},
-                'children':{
-                    'type':'array',
-                    'items':{
-                        'type':'object',
-                        'properties':{
-                            'template':{'$ref':'#/definitions/template'},
-                            'type':{'$ref':'#/definitions/type'},
-                            'children':{'$ref':'#/definitions/children'},
-                            'options':{'$ref': '#/definitions/options'}
-                        }
-                    }
-                },
-                'options':{'type': 'object'},
-                'classes':{ 'type': 'string' }
-            },
+            // '$schema': 'http://json-schema.org/draft-04/schema#',
             'type':'object',
-            'properties':{
-                'template':{'$ref':'#/definitions/template'},
-                'type':{'$ref':'#/definitions/type'},
-                'children':{'$ref':'#/definitions/children'},
-                'options':{'$ref': '#/definitions/options'}
-            }
+            'anyOf':[]           
         };
         //Add all types to the schema
-        for( var key in viewModels ){
-            if( key !== '' ){
-                schema.definitions.type.enum.push( key );
-            }
-        }
+        // for( var key in viewModels ){
+        //     if( key !== '' ){
+        //         schema.oneOf.push({
+        //             "type":"object",
+        //             "properties":{
+        //                 "type":{
+        //                     "type":"string",
+        //                     "enum":[key]
+        //                 },
+        //                 "children":{
+        //                     "type":"array",
+        //                     "items":{"#ref":"#"}
+        //                 }
+        //             }    
+        //         });
+        //     }
+        // }
         //Add all templates to the schema
         for( var key in core.mvvm.getRegisteredTemplates() ){
             if( key !== '' ){
-                schema.definitions.template.enum.push( key );
+                var sTemplate = {
+                    'properties':{
+                        'template':{
+                            'type':'string',
+                            'enum':[key]
+                        },
+                        'children':{
+                            'type':'array',
+                            'items':{'$ref':'#'}
+                        }
+                    }    
+                };
+                // if( schemas[key] && schemas[key].options ){
+                //     sTemplate.properties.options = {
+                //         "type":"object",
+                //         "properties":{},
+                //         "required":[]
+                //     }
+                //     for( var option in schemas[key].options ){
+                //         sTemplate.properties.options.properties[option] = 
+                //         schemas[key].options[option];
+                //         sTemplate.properties.options.required.push(option);
+                //     }
+                // }
+                schema.anyOf.push(sTemplate);
             }
         }
-
+        
         return schema;
 
     }
@@ -400,7 +424,8 @@ define('scalejs.metadataFactory',[
             useDefault: useDefault,
             registerActions: actionModule.registerActions,
             getRegisteredActions: actionModule.getRegisteredActions,
-            generateSchema: generateSchema
+            generateSchema: generateSchema,
+            registerSchema: registerSchema
     }};
 
     core.registerExtension(metadatafactory);
