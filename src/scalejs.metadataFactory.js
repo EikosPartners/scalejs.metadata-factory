@@ -20,6 +20,7 @@ define([
         computed = ko.computed,
         evaluate = core.expression.evaluate,
         observable = ko.observable,
+        observableArray = ko.observableArray,
         viewModels = {
             '': defaultViewModel,
             context: contextViewModel

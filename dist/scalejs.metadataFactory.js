@@ -1,6 +1,6 @@
 
 
-define('text!scalejs.metadataFactory/metadataFactory.html',[],function () { return '<div id="metadata_items_template">\r\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\r\n\r\n    <!--/ko -->\r\n</div>\r\n\r\n<div id="metadata_item_template">\r\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\r\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id="metadata_default_template">\r\n    <div data-bind="text: JSON.stringify($data)"></div>\r\n</div>\r\n\r\n<div id="metadata_loading_template">\r\n    <div class="loader hexdots-loader">\r\n    loading...\r\n    </div>\r\n</div>';});
+define('text!scalejs.metadataFactory/metadataFactory.html',[],function () { return '<div id="metadata_items_template">\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\n\n    <!--/ko -->\n</div>\n\n<div id="metadata_item_template">\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n    <!-- /ko -->\n</div>\n\n<div id="metadata_default_template">\n    <div data-bind="text: JSON.stringify($data)"></div>\n</div>\n\n<div id="metadata_loading_template">\n    <div class="loader hexdots-loader">\n    loading...\n    </div>\n</div>';});
 
 define('scalejs.metadataFactory',[
     'scalejs!core',
@@ -24,6 +24,7 @@ define('scalejs.metadataFactory',[
         computed = ko.computed,
         evaluate = core.expression.evaluate,
         observable = ko.observable,
+        observableArray = ko.observableArray,
         viewModels = {
             '': defaultViewModel,
             context: contextViewModel
