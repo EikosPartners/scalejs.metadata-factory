@@ -49,7 +49,7 @@ define([
                 }
                 data(results);
             }}
-            createViewModel(node.dataSourceEndpoint).action(callback);
+            createAction(node.dataSourceEndpoint).action(callback);
         }
 
         // // visible binding using expressions and context's getValue func
