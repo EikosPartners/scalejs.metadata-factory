@@ -5,15 +5,13 @@ define([
     'scalejs.metadataFactory/action/actionModule',
     'scalejs.metadataFactory/template/templateViewModel',
     'scalejs.mvvm',
-    'userservice',
     'scalejs.expression-jsep'
 ], function (
     core,
     ko,
     view,
     actionModule,
-    templateViewModel,
-    userService
+    templateViewModel
 ) {
     'use strict';
 
@@ -54,7 +52,7 @@ define([
                                 return context.getValue(id);
                             }
                             if (id === 'role') {
-                                return userService.role();
+                                return core.userService.role();
                             }
                             return '';
                         })

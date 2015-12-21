@@ -29,6 +29,7 @@ define([
     return function actionViewModel(node) {
         var registeredActions = core.metadataFactory.getRegisteredActions();
         var text = node.text || node.options.text,
+            createViewModel = core.metadataFactory.createViewModel.bind(this),
             validate = node.validate,
             options = node.options || {},
             actionType = node.actionType,
@@ -45,7 +46,6 @@ define([
         }
 
         function action() {
-            
             if (!actionFunc){
                 console.error('actions[actionType] is not defined', node);
                 return;
@@ -61,6 +61,17 @@ define([
             }
         }
 
+        if (actionType === 'dropdown') {
+            options.dropdown = {
+                showDropdown: observable(false),
+                items: options.items.map(function (v) {
+                    if (typeof v === 'string') {
+                        return createViewModel({ type: 'action', text: v });
+                    }
+                    return createViewModel(v);
+                })
+            }
+        }
         return merge(node, {
             isShown: isShown,
             action: action,
@@ -69,5 +80,6 @@ define([
             options: options,
             context: context
         });
+
     };
 });

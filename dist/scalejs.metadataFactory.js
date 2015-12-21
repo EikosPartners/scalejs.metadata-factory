@@ -2,7 +2,7 @@
 define('text!scalejs.metadataFactory/metadataFactory.html',[],function () { return '<div id="metadata_items_template">\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\n\n    <!--/ko -->\n</div>\n\n<div id="metadata_item_template">\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n    <!-- /ko -->\n</div>\n\n<div id="metadata_default_template">\n    <div data-bind="text: JSON.stringify($data)"></div>\n</div>\n\n<div id="metadata_loading_template">\n    <div class="loader hexdots-loader">\n    loading...\n    </div>\n</div>';});
 
 
-define('text!scalejs.metadataFactory/action/views/action.html',[],function () { return '<div id="action_template">\n    <div data-bind="css: $data.classes" class="action-button-wrapper">\n        <button data-class="action-button">\n            <span data-bind="text: text"></span>\n        </button>\n    </div>\n</div>';});
+define('text!scalejs.metadataFactory/action/views/action.html',[],function () { return '<div id="action_template">\n    <div data-bind="css: $data.classes, visible:isShown" class="action-button-wrapper">\n        <button data-class="action-button">\n            <span data-bind="text: text"></span>\n        </button>\n    </div>\n</div>\n';});
 
 /*global define */
 /*jslint sloppy: true*/
@@ -54,6 +54,7 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
     return function actionViewModel(node) {
         var registeredActions = core.metadataFactory.getRegisteredActions();
         var text = node.text || node.options.text,
+            createViewModel = core.metadataFactory.createViewModel.bind(this),
             validate = node.validate,
             options = node.options || {},
             actionType = node.actionType,
@@ -70,7 +71,6 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
         }
 
         function action() {
-            
             if (!actionFunc){
                 console.error('actions[actionType] is not defined', node);
                 return;
@@ -86,6 +86,17 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
             }
         }
 
+        if (actionType === 'dropdown') {
+            options.dropdown = {
+                showDropdown: observable(false),
+                items: options.items.map(function (v) {
+                    if (typeof v === 'string') {
+                        return createViewModel({ type: 'action', text: v });
+                    }
+                    return createViewModel(v);
+                })
+            }
+        }
         return merge(node, {
             isShown: isShown,
             action: action,
@@ -94,6 +105,7 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
             options: options,
             context: context
         });
+
     };
 });
 
@@ -137,16 +149,21 @@ define('scalejs.metadataFactory/template/templateViewModel',[
 ) {
     'use strict';
 
-   return  function templateViewModel (node, metadata) {
+   return function templateViewModel (node) {
         var observable = ko.observable,
             merge = core.object.merge,
+            data = observable(node.data || {}),
+            context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
+            createAction = core.utils.createAction.bind(context),
             createViewModel = core.metadataFactory.createViewModel.bind(this), // passes context
-            createViewModels = core.metadataFactory.createViewModels.bind(this), // passes context
+            createViewModels = core.metadataFactory.createViewModels.bind(context), // passes context
             // properties
+            isShown = observable(node.visible !== false),
+            visible = observable(),
             actionNode = _.cloneDeep(node.action),
             action,
-            data = observable(node.data || {}),
             mappedChildNodes;
+
         function getValue(key) {
             return (data() || {})[key];
         }
@@ -154,11 +171,11 @@ define('scalejs.metadataFactory/template/templateViewModel',[
         mappedChildNodes = createViewModels(node.children || []);
 
         if (actionNode) {
-            action = createViewModel(actionNode).action;
+            action = createAction(actionNode);
         } else {
             action = function () {};
         }
-
+        
         if(node.actionEndpoint){
             
             // create a callback object that the ajaxAction knows how to use.
@@ -173,10 +190,24 @@ define('scalejs.metadataFactory/template/templateViewModel',[
             createViewModel(node.actionEndpoint).action(callback);
         }
 
+        // // visible binding using expressions and context's getValue func
+        // if (has(node.visible)) {
+        //     console.log('visible in template', node.visible);
+        //     is(node.visible, 'boolean') ? visible(node.visible) :  visible = computed(function() {
+
+        //         return userService.isAllowed(node.visible);
+        //     });
+
+        //     // isShown is an observable that can be updated by rules so when visible changes so must isShown
+        //     var isVisible = visible();
+        //     isShown(isVisible);
+        //     visible.subscribe(isShown);
+        // }
         return merge(node, {
             mappedChildNodes: mappedChildNodes,
             action: action,
             data: data,
+            isShown: isShown,
             context: this
         });
     }
@@ -189,15 +220,13 @@ define('scalejs.metadataFactory',[
     'scalejs.metadataFactory/action/actionModule',
     'scalejs.metadataFactory/template/templateViewModel',
     'scalejs.mvvm',
-    'userservice',
     'scalejs.expression-jsep'
 ], function (
     core,
     ko,
     view,
     actionModule,
-    templateViewModel,
-    userService
+    templateViewModel
 ) {
     'use strict';
 
@@ -238,7 +267,7 @@ define('scalejs.metadataFactory',[
                                 return context.getValue(id);
                             }
                             if (id === 'role') {
-                                return userService.role();
+                                return core.userService.role();
                             }
                             return '';
                         })
