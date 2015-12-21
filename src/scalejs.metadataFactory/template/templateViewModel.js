@@ -38,7 +38,7 @@ define([
             action = function () {};
         }
         
-        if(node.actionEndpoint){
+        if(node.dataSourceEndpoint){
             
             // create a callback object that the ajaxAction knows how to use.
             // this is the alternative to the lously coupled nextactions[] || error actions. 
@@ -49,7 +49,7 @@ define([
                 }
                 data(results);
             }}
-            createViewModel(node.actionEndpoint).action(callback);
+            createViewModel(node.dataSourceEndpoint).action(callback);
         }
 
         // // visible binding using expressions and context's getValue func
