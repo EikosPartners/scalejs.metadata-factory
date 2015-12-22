@@ -52,7 +52,7 @@ define([
                                 return context.getValue(id);
                             }
                             if (id === 'role') {
-                                return core.userService.role();
+                                return core.userservice.role();
                             }
                             return '';
                         })
