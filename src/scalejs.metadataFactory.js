@@ -163,7 +163,7 @@ define([
                 'options':{'type': 'object'},
                 'classes':{ 'type': 'string' }
             },
-            'type':'object',
+            'type': ['array','object'],
             'properties':{
                 'template':{'$ref':'#/definitions/template'},
                 'type':{'$ref':'#/definitions/type'},
