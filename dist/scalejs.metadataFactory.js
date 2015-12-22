@@ -392,13 +392,14 @@ define('scalejs.metadataFactory',[
                 schema.definitions.type.enum.push( key );
             }
         }
+        schema.definitions.type.enum.sort();
         //Add all templates to the schema
         for( var key in core.mvvm.getRegisteredTemplates() ){
             if( key !== '' ){
                 schema.definitions.template.enum.push( key );
             }
         }
-
+        schema.definitions.template.enum.sort();
         return schema;
 
     }
