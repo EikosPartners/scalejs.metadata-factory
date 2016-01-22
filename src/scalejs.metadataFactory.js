@@ -79,7 +79,13 @@ define([
             metadataContext = this;
         } else {
             metadataContext = {
-                metadata: metadata
+                metadata: metadata,
+                // default getValue can grab from the store
+                getValue: function (id) {
+                    if (id === 'store' && core.noticeboard.global) {
+                        return ko.unwrap(core.noticeboard.global.dictionary);
+                    }
+                }
             };
         }
 
