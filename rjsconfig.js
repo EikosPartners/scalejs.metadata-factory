@@ -38,7 +38,8 @@ requirejs({
     text: '../bower_components/text/text',
     lodash: '../bower_components/lodash/lodash',
     userservice: 'empty:',
-    'scalejs.expression-jsep': 'empty:'
+    'scalejs.expression-jsep': '../bower_components/scalejs.expression-jsep/dist/scalejs.expression-jsep.min',
+    jsep: '../bower_components/jsep/build/jsep'
   },
   packages: [
 

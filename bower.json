@@ -1,6 +1,6 @@
 {
   "name": "scalejs.metadataFactory",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "homepage": "",
   "authors": [],
   "description": "",
@@ -16,7 +16,8 @@
     "lodash": "~3.10.1",
     "scalejs": "lisovin/scalejs",
     "scalejs.ajax-jquery": "EikosPartners/scalejs.ajax-jquery",
-    "scalejs.mvvm": "EikosPartners/scalejs.mvvm"
+    "scalejs.mvvm": "EikosPartners/scalejs.mvvm",
+    "scalejs.expression-jsep": "EikosPartners/scalejs.expression-jsep"
   },
   "devDependencies": {
     "requirejs": "latest"
