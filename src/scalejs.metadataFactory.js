@@ -1,6 +1,7 @@
 define([
     'scalejs!core',
     'knockout',
+    'lodash',
     'text!scalejs.metadataFactory/metadataFactory.html',
     'scalejs.metadataFactory/action/actionModule',
     'scalejs.metadataFactory/template/templateViewModel',
@@ -9,6 +10,7 @@ define([
 ], function (
     core,
     ko,
+    _,
     view,
     actionModule,
     templateViewModel
@@ -84,6 +86,9 @@ define([
                 getValue: function (id) {
                     if (id === 'store' && core.noticeboard.global) {
                         return ko.unwrap(core.noticeboard.global.dictionary);
+                    }
+                    if (id === '_') {
+                        return _;
                     }
                 }
             };
