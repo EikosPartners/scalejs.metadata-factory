@@ -36,7 +36,9 @@ define([
     function createViewModel(node) {
         var rendered = observable(true),
             context = this;
-        
+
+        node = _.cloneDeep(node); //clone the node to stop mutation issues
+
         // if(!this || !this.metadata) {
         //     console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
         // }
@@ -44,8 +46,8 @@ define([
             console.log('ignored node ', node);
         } else {
             var mappedNode = viewModels[node.type] ? viewModels[node.type].call(this, node) : defaultViewModel.call(this, node);
-            
-                    
+
+
             if (mappedNode && has(node.rendered)) {
                 rendered = is(node.rendered, 'boolean') ? observable(node.rendered)
                     : computed(function() {
