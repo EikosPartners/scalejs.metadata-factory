@@ -5,6 +5,7 @@ define([
     'text!scalejs.metadataFactory/metadataFactory.html',
     'scalejs.metadataFactory/action/actionModule',
     'scalejs.metadataFactory/template/templateViewModel',
+    'moment',
     'scalejs.mvvm',
     'scalejs.expression-jsep'
 ], function (
@@ -13,7 +14,8 @@ define([
     _,
     view,
     actionModule,
-    templateViewModel
+    templateViewModel,
+    moment
 ) {
     'use strict';
 
@@ -91,6 +93,16 @@ define([
                     }
                     if (id === '_') {
                         return _;
+                    }
+                    if (id == 'Date') {
+                        return function (d) {
+                            return  moment(d).toDate().getTime();
+                        }
+                    }
+                    if (id == 'IncrementDate') {
+                        return function (d,t,s) {
+                            return moment(d).add(t,s).toDate().getTime();
+                        }
                     }
                 }
             };
