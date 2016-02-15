@@ -38,9 +38,9 @@ requirejs({
     text: '../bower_components/text/text',
     lodash: '../bower_components/lodash/lodash',
     userservice: 'empty:',
-    'scalejs.expression-jsep': '../bower_components/scalejs.expression-jsep/dist/scalejs.expression-jsep.min',
+    'scalejs.expression-jsep': '../bower_components/scalejs.expression-jsep/dist/scalejs.expression-jsep',
     jsep: '../bower_components/jsep/build/jsep',
-    'moment': 'empty:'
+    moment: '../bower_components/moment/moment'
   },
   packages: [
 

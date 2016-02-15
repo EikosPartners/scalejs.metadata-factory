@@ -1,8 +1,8 @@
 
-define('text!scalejs.metadataFactory/metadataFactory.html',[],function () { return '<div id="metadata_items_template">\r\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\r\n\r\n    <!--/ko -->\r\n</div>\r\n\r\n<div id="metadata_item_template">\r\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\r\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id="metadata_default_template">\r\n    <div data-bind="text: JSON.stringify($data)"></div>\r\n</div>\r\n\r\n<div id="metadata_loading_template">\r\n    <div class="loader hexdots-loader">\r\n    loading...\r\n    </div>\r\n</div>';});
+define('text!scalejs.metadataFactory/metadataFactory.html',[],function () { return '<div id="metadata_items_template">\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\n\n    <!--/ko -->\n</div>\n\n<div id="metadata_item_template">\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n    <!-- /ko -->\n</div>\n\n<div id="metadata_default_template">\n    <div data-bind="text: JSON.stringify($data)"></div>\n</div>\n\n<div id="metadata_loading_template">\n    <div class="loader hexdots-loader">\n    loading...\n    </div>\n</div>';});
 
 
-define('text!scalejs.metadataFactory/action/views/action.html',[],function () { return '<div id="action_template">\r\n    <div data-bind="css: $data.classes, visible:isShown" class="action-button-wrapper">\r\n        <button data-class="action-button">\r\n            <span data-bind="text: text"></span>\r\n        </button>\r\n    </div>\r\n</div>\r\n';});
+define('text!scalejs.metadataFactory/action/views/action.html',[],function () { return '<div id="action_template">\n    <div data-bind="css: $data.classes, visible:isShown" class="action-button-wrapper">\n        <button data-class="action-button">\n            <span data-bind="text: text"></span>\n        </button>\n    </div>\n</div>\n';});
 
 /*global define */
 /*jslint sloppy: true*/
@@ -198,6 +198,52 @@ define('scalejs.metadataFactory/template/templateViewModel',[
     }
 });
 
+define('scalejs.metadataFactory/functionRegistry/functionRegistry',[
+    'scalejs.core'
+], function (
+    core
+    ) {
+        'use strict';
+        function functionRegistry() {
+            var dictionary = {};
+
+            // will set the value on an existing observable
+
+            function register(key, func) {
+                dictionary[key] = func;
+            }
+
+            function get(key) {
+                var func = dictionary[key];
+                if (func) {
+                    return func;
+                }
+                console.error('function ', key, 'not found');
+            }
+            function remove(key) {
+                if (dictionary[key]) {
+                    delete dictionary[key];
+                }
+            }
+
+            return {
+                register: register,
+                get: get,
+                remove: remove,
+                dictionary: dictionary
+            };
+        }
+        // create instance
+        var registry = functionRegistry();
+        // register in sandbox/core
+        //core.registerExtension({
+        //    functionRegistry: registry
+        //});
+        //return for require
+        return registry;
+    });
+
+
 define('scalejs.metadataFactory',[
     'scalejs!core',
     'knockout',
@@ -206,6 +252,7 @@ define('scalejs.metadataFactory',[
     'scalejs.metadataFactory/action/actionModule',
     'scalejs.metadataFactory/template/templateViewModel',
     'moment',
+    'scalejs.metadataFactory/functionRegistry/functionRegistry',
     'scalejs.mvvm',
     'scalejs.expression-jsep'
 ], function (
@@ -215,7 +262,8 @@ define('scalejs.metadataFactory',[
     view,
     actionModule,
     templateViewModel,
-    moment
+    moment,
+    functionRegistry
 ) {
     'use strict';
 
@@ -476,7 +524,8 @@ define('scalejs.metadataFactory',[
             useDefault: useDefault,
             registerActions: actionModule.registerActions,
             getRegisteredActions: actionModule.getRegisteredActions,
-            generateSchema: generateSchema
+            generateSchema: generateSchema,
+            functionRegistry: functionRegistry
     }};
 
     core.registerExtension(metadatafactory);
