@@ -6,7 +6,6 @@ define([
     'scalejs.metadataFactory/action/actionModule',
     'scalejs.metadataFactory/template/templateViewModel',
     'moment',
-    'scalejs.metadataFactory/functionRegistry/functionRegistry',
     'scalejs.mvvm',
     'scalejs.expression-jsep'
 ], function (
@@ -16,8 +15,7 @@ define([
     view,
     actionModule,
     templateViewModel,
-    moment,
-    functionRegistry
+    moment
 ) {
     'use strict';
 
@@ -278,8 +276,7 @@ define([
             useDefault: useDefault,
             registerActions: actionModule.registerActions,
             getRegisteredActions: actionModule.getRegisteredActions,
-            generateSchema: generateSchema,
-            functionRegistry: functionRegistry
+            generateSchema: generateSchema
     }};
 
     core.registerExtension(metadatafactory);
