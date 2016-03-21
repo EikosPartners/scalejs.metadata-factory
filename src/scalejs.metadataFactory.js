@@ -33,7 +33,9 @@ define([
             action: actionModule.action,
             template: templateViewModel
         },
+        identifiers = {},
         useDefault = true;
+        
 
     function createViewModel(node) {
         var rendered = observable(true),
@@ -104,26 +106,7 @@ define([
                             return moment(d).add(t,s).toDate().getTime();
                         }
                     }
-                    if (id === 'GetMonth') {
-                        return function (d) {
-                            return moment(d).toDate().getMonth();
-                        }
-                    }
-                    
-                    if (id === 'LastDateMonth') {
-                        return function (d) {
-                            return moment(d).endOf('month');
-                        }
-                    }
-                    if (id === 'SubtractBusinessDays') {
-                        return function (d, i) {
-                            while (i > 0) {
-                                if (d.weekday() !== 0 || d.weekday !== 6) { i -= 1; }
-                                d.subtract(1, 'day');
-                            }
-                            return moment(d).toDate().getTime();
-                        }
-                    }
+                    return identifiers[id];
                 }
             };
         }
@@ -175,6 +158,10 @@ define([
         core.object.extend(viewModels, newViewModels);
     }
 
+    function registerIdentifiers(ids) {
+        core.object.extend(identifiers, ids);
+    }
+    
     function dispose(metadata) {
         // clean up clean up everybody everywhere
         ko.unwrap(metadata).forEach(function (node) {
@@ -296,7 +283,8 @@ define([
             useDefault: useDefault,
             registerActions: actionModule.registerActions,
             getRegisteredActions: actionModule.getRegisteredActions,
-            generateSchema: generateSchema
+            generateSchema: generateSchema,
+            registerIdentifiers: registerIdentifiers
     }};
 
     core.registerExtension(metadatafactory);
