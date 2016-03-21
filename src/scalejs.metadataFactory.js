@@ -104,6 +104,26 @@ define([
                             return moment(d).add(t,s).toDate().getTime();
                         }
                     }
+                    if (id === 'GetMonth') {
+                        return function (d) {
+                            return moment(d).toDate().getMonth();
+                        }
+                    }
+                    
+                    if (id === 'LastDateMonth') {
+                        return function (d) {
+                            return moment(d).endOf('month');
+                        }
+                    }
+                    if (id === 'SubtractBusinessDays') {
+                        return function (d, i) {
+                            while (i > 0) {
+                                if (d.weekday() !== 0 || d.weekday !== 6) { i -= 1; }
+                                d.subtract(1, 'day');
+                            }
+                            return moment(d).toDate().getTime();
+                        }
+                    }
                 }
             };
         }
