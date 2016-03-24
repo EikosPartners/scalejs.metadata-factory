@@ -382,26 +382,24 @@ define('scalejs.metadataFactory',[
                 'type':{'type':'string','enum':[]},
                 'children':{
                     'type':'array',
-                    'items':{
-                        'type':'object',
-                        'properties':{
-                            'template':{'$ref':'#/definitions/template'},
-                            'type':{'$ref':'#/definitions/type'},
-                            'children':{'$ref':'#/definitions/children'},
-                            'options':{'$ref': '#/definitions/options'}
-                        }
-                    }
+                    'items':{'$ref':'#/definitions/subObject'}
                 },
                 'options':{'type': 'object'},
-                'classes':{ 'type': 'string' }
+                'classes':{'type': 'string'},
+                'subObject':{
+                    'type': 'object',
+                    'properties': {
+                        'template':{'$ref':'#/definitions/template'},
+                        'type':{'$ref':'#/definitions/type'},
+                        'children':{'$ref':'#/definitions/children'},
+                        'options':{'$ref': '#/definitions/options'}
+                    }
+                }
             },
-            'type': ['array','object'],
-            'properties':{
-                'template':{'$ref':'#/definitions/template'},
-                'type':{'$ref':'#/definitions/type'},
-                'children':{'$ref':'#/definitions/children'},
-                'options':{'$ref': '#/definitions/options'}
-            }
+            'oneOf': [
+                {'$ref':'#/definitions/subObject'},
+                {'type':'array','items':{'$ref':'#/definitions/subObject'}}
+            ]
         };
         //Add all types to the schema
         for( var key in viewModels ){
