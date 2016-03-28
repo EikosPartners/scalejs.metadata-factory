@@ -377,9 +377,9 @@ define('scalejs.metadataFactory',[
 
     function registerSchema(schema) {
         for( var key in schema ){
-            if( schemas.hasOwnProperty(key) ){
+            // if( schemas.hasOwnProperty(key) ){
                 schemas[key] = schema[key];
-            }
+            // }
         }
     }
 
@@ -387,10 +387,6 @@ define('scalejs.metadataFactory',[
 
         //Basic schema layout for pjson
         var schema = {
-        //     // '$schema': 'http://json-schema.org/draft-04/schema#',
-        //     'type':'object',
-        //     'anyOf':[]           
-        // };
             '$schema': 'http://json-schema.org/draft-04/schema#',
             'definitions':{
                 'template':{'type':'string','enum':[]},
@@ -402,13 +398,32 @@ define('scalejs.metadataFactory',[
                 'options':{'type': 'object'},
                 'classes':{'type': 'string'},
                 'subObject':{
-                    'type': 'object',
-                    'properties': {
-                        'template':{'$ref':'#/definitions/template'},
-                        'type':{'$ref':'#/definitions/type'},
-                        'children':{'$ref':'#/definitions/children'},
-                        'options':{'$ref': '#/definitions/options'}
-                    }
+                    'allOf': [
+                        {
+                            'type': 'object',
+                            'properties': {
+                                // 'template':{'$ref':'#/definitions/template'},
+                                'type':{'$ref': '#/definitions/type'},
+                                'children':{'$ref':'#/definitions/children'}
+                                // 'options':{'$ref':'#/definitions/options'}
+                            },
+                            'required':  ['type', 'template']
+                        },
+                        {
+                            '$ref': '#/definitions/templateOptions'
+                        }
+                    ]
+                },
+                'templateOptions': {
+                    'oneOf': [
+                        {
+                            'type':'object',
+                            'properties': {
+                                'template': {'$ref':'#/definitions/template'},
+                                'options':{'$ref':'#/definitions/options'}
+                            }
+                        }
+                    ]
                 }
             },
             'oneOf': [
@@ -416,6 +431,7 @@ define('scalejs.metadataFactory',[
                 {'type':'array','items':{'$ref':'#/definitions/subObject'}}
             ]
         };
+        
         //Add all types to the schema
         for( var key in viewModels ){
             if( key !== '' ){
@@ -426,39 +442,43 @@ define('scalejs.metadataFactory',[
         //Add all templates to the schema
         for( var key in core.mvvm.getRegisteredTemplates() ){
             if( key !== '' ){
-                schema.definitions.template.enum.push( key );
+                // schema.definitions.template.enum.push( key );
+                if(!schemas.hasOwnProperty(key)) {
+                    schema.definitions.template.enum.push( key );
+                }
             }
+            
         }
-        // for( var key in core.mvvm.getRegisteredTemplates() ){
-        //     if( key !== '' ){
-        //         var sTemplate = {
-        //             'properties':{
-        //                 'template':{
-        //                     'type':'string',
-        //                     'enum':[key]
-        //                 },
-        //                 'children':{
-        //                     'type':'array',
-        //                     'items':{'$ref':'#'}
-        //                 }
-        //             }    
-        //         };
-        //         // if( schemas[key] && schemas[key].options ){
-        //         //     sTemplate.properties.options = {
-        //         //         "type":"object",
-        //         //         "properties":{},
-        //         //         "required":[]
-        //         //     }
-        //         //     for( var option in schemas[key].options ){
-        //         //         sTemplate.properties.options.properties[option] = 
-        //         //         schemas[key].options[option];
-        //         //         sTemplate.properties.options.required.push(option);
-        //         //     }
-        //         // }
-        //         schema.anyOf.push(sTemplate);
-        //     }
-        // }
         schema.definitions.template.enum.sort();
+        
+        //Add all template/options pairs to the schema
+        // Format needed in templates
+            /*"layout_horizontal_template":{
+                "widths":{
+                    "type":"array",
+                    "items":{
+                        "type":"integer"
+                    }
+                },
+                "sizeEx": {
+                    "type": "string",
+                    "enum": ["a","b","c"]
+                }
+            }*/
+        var templates = schemas;
+        for( var key in  templates) {
+            var option = {
+                'type': 'object',
+                'properties': {
+                    'template': {'enum':[key]},
+                    'options': {
+                        'type': 'object',
+                        'properties': templates[key]
+                    }
+                }
+            }
+            schema.definitions.templateOptions.oneOf.push(option);
+        }
         return schema;
         
     }
