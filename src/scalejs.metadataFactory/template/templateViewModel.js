@@ -3,7 +3,7 @@ define([
     'scalejs!core',
     'lodash',
     'knockout'
-    
+
 ], function (
     core,
     _,
@@ -11,16 +11,20 @@ define([
 ) {
     'use strict';
 
-   return  function templateViewModel (node, metadata) {
+   return function templateViewModel (node) {
         var observable = ko.observable,
             merge = core.object.merge,
-            createViewModel = core.metadataFactory.createViewModel.bind(this), // passes context
-            createViewModels = core.metadataFactory.createViewModels.bind(this), // passes context
+            data = observable(node.data || {}),
+            context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
+            createViewModel = core.metadataFactory.createViewModel.bind(context), // passes context
+            createViewModels = core.metadataFactory.createViewModels.bind(context), // passes context
             // properties
+            isShown = observable(node.visible !== false),
+            //visible = observable(),
             actionNode = _.cloneDeep(node.action),
             action,
-            data = observable(node.data || {}),
             mappedChildNodes;
+
         function getValue(key) {
             return (data() || {})[key];
         }
@@ -28,15 +32,14 @@ define([
         mappedChildNodes = createViewModels(node.children || []);
 
         if (actionNode) {
-            action = createViewModel(actionNode).action;
+            action = createViewModel(actionNode);
         } else {
             action = function () {};
         }
 
-        if(node.actionEndpoint){
-            
+        if(node.dataSourceEndpoint){
             // create a callback object that the ajaxAction knows how to use.
-            // this is the alternative to the lously coupled nextactions[] || error actions. 
+            // this is the alternative to the lously coupled nextactions[] || error actions.
             var callback = { callback: function(err, results){
                 if(err) {
                     console.log('ajax request error',err);
@@ -44,13 +47,14 @@ define([
                 }
                 data(results);
             }}
-            createViewModel(node.actionEndpoint).action(callback);
+            createViewModel(node.dataSourceEndpoint).action(callback);
         }
 
         return merge(node, {
             mappedChildNodes: mappedChildNodes,
             action: action,
             data: data,
+            isShown: isShown,
             context: this
         });
     }

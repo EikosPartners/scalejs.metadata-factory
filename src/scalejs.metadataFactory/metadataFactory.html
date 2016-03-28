@@ -7,7 +7,9 @@
 <div id="metadata_item_template">
     <!-- ko comment: $data.template || $data.type + '_template' -->
     <!-- /ko -->
+    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->
     <!-- ko template: $data.template || $data.type + '_template' -->
+    <!-- /ko -->
     <!-- /ko -->
 </div>
 

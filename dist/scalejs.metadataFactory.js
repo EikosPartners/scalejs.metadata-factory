@@ -1,8 +1,8 @@
 
-define('text!scalejs.metadataFactory/metadataFactory.html',[],function () { return '<div id="metadata_items_template">\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\n\n    <!--/ko -->\n</div>\n\n<div id="metadata_item_template">\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\n    <!-- /ko -->\n</div>\n\n<div id="metadata_default_template">\n    <div data-bind="text: JSON.stringify($data)"></div>\n</div>\n\n<div id="metadata_loading_template">\n    <div class="loader hexdots-loader">\n    loading...\n    </div>\n</div>';});
+define('text!scalejs.metadataFactory/metadataFactory.html',[],function () { return '<div id="metadata_items_template">\r\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\r\n\r\n    <!--/ko -->\r\n</div>\r\n\r\n<div id="metadata_item_template">\r\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\r\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id="metadata_default_template">\r\n    <div data-bind="text: JSON.stringify($data)"></div>\r\n</div>\r\n\r\n<div id="metadata_loading_template">\r\n    <div class="loader hexdots-loader">\r\n    loading...\r\n    </div>\r\n</div>';});
 
 
-define('text!scalejs.metadataFactory/action/views/action.html',[],function () { return '<div id="action_template">\n    <div data-bind="css: $data.classes" class="action-button-wrapper">\n        <button data-class="action-button">\n            <span data-bind="text: text"></span>\n        </button>\n    </div>\n</div>';});
+define('text!scalejs.metadataFactory/action/views/action.html',[],function () { return '<div id="action_template">\r\n    <div data-bind="css: $data.classes, visible:isShown" class="action-button-wrapper">\r\n        <button data-class="action-button">\r\n            <span data-bind="text: text"></span>\r\n        </button>\r\n    </div>\r\n</div>\r\n';});
 
 /*global define */
 /*jslint sloppy: true*/
@@ -54,6 +54,7 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
     return function actionViewModel(node) {
         var registeredActions = core.metadataFactory.getRegisteredActions();
         var text = node.text || node.options.text,
+            createViewModel = core.metadataFactory.createViewModel.bind(this),
             validate = node.validate,
             options = node.options || {},
             actionType = node.actionType,
@@ -70,7 +71,6 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
         }
 
         function action() {
-            
             if (!actionFunc){
                 console.error('actions[actionType] is not defined', node);
                 return;
@@ -86,6 +86,17 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
             }
         }
 
+        if (actionType === 'dropdown') {
+            options.dropdown = {
+                showDropdown: observable(false),
+                items: options.items.map(function (v) {
+                    if (typeof v === 'string') {
+                        return createViewModel({ type: 'action', text: v });
+                    }
+                    return createViewModel(v);
+                })
+            }
+        }
         return merge(node, {
             isShown: isShown,
             action: action,
@@ -94,6 +105,7 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
             options: options,
             context: context
         });
+
     };
 });
 
@@ -129,7 +141,7 @@ define('scalejs.metadataFactory/template/templateViewModel',[
     'scalejs!core',
     'lodash',
     'knockout'
-    
+
 ], function (
     core,
     _,
@@ -137,16 +149,20 @@ define('scalejs.metadataFactory/template/templateViewModel',[
 ) {
     'use strict';
 
-   return  function templateViewModel (node, metadata) {
+   return function templateViewModel (node) {
         var observable = ko.observable,
             merge = core.object.merge,
-            createViewModel = core.metadataFactory.createViewModel.bind(this), // passes context
-            createViewModels = core.metadataFactory.createViewModels.bind(this), // passes context
+            data = observable(node.data || {}),
+            context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
+            createViewModel = core.metadataFactory.createViewModel.bind(context), // passes context
+            createViewModels = core.metadataFactory.createViewModels.bind(context), // passes context
             // properties
+            isShown = observable(node.visible !== false),
+            //visible = observable(),
             actionNode = _.cloneDeep(node.action),
             action,
-            data = observable(node.data || {}),
             mappedChildNodes;
+
         function getValue(key) {
             return (data() || {})[key];
         }
@@ -154,15 +170,14 @@ define('scalejs.metadataFactory/template/templateViewModel',[
         mappedChildNodes = createViewModels(node.children || []);
 
         if (actionNode) {
-            action = createViewModel(actionNode).action;
+            action = createViewModel(actionNode);
         } else {
             action = function () {};
         }
 
-        if(node.actionEndpoint){
-            
+        if(node.dataSourceEndpoint){
             // create a callback object that the ajaxAction knows how to use.
-            // this is the alternative to the lously coupled nextactions[] || error actions. 
+            // this is the alternative to the lously coupled nextactions[] || error actions.
             var callback = { callback: function(err, results){
                 if(err) {
                     console.log('ajax request error',err);
@@ -170,13 +185,14 @@ define('scalejs.metadataFactory/template/templateViewModel',[
                 }
                 data(results);
             }}
-            createViewModel(node.actionEndpoint).action(callback);
+            createViewModel(node.dataSourceEndpoint).action(callback);
         }
 
         return merge(node, {
             mappedChildNodes: mappedChildNodes,
             action: action,
             data: data,
+            isShown: isShown,
             context: this
         });
     }
@@ -185,23 +201,32 @@ define('scalejs.metadataFactory/template/templateViewModel',[
 define('scalejs.metadataFactory',[
     'scalejs!core',
     'knockout',
+    'lodash',
     'text!scalejs.metadataFactory/metadataFactory.html',
     'scalejs.metadataFactory/action/actionModule',
     'scalejs.metadataFactory/template/templateViewModel',
-    'scalejs.mvvm'
-
+    'moment',
+    'scalejs.mvvm',
+    'scalejs.expression-jsep'
 ], function (
     core,
     ko,
+    _,
     view,
     actionModule,
-    templateViewModel
+    templateViewModel,
+    moment
 ) {
     'use strict';
 
     core.mvvm.registerTemplates(view);
 
     var has = core.object.has,
+        is = core.type.is,
+        computed = ko.computed,
+        evaluate = core.expression.evaluate,
+        observable = ko.observable,
+        observableArray = ko.observableArray,
         viewModels = {
             '': defaultViewModel,
             context: contextViewModel,
@@ -211,9 +236,16 @@ define('scalejs.metadataFactory',[
         schemas = {
                 
         },
+        identifiers = {},
         useDefault = true;
+        
 
     function createViewModel(node) {
+        var rendered = observable(true),
+            context = this;
+
+        node = _.cloneDeep(node); //clone the node to stop mutation issues
+
         // if(!this || !this.metadata) {
         //     console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
         // }
@@ -221,8 +253,25 @@ define('scalejs.metadataFactory',[
             console.log('ignored node ', node);
         } else {
             var mappedNode = viewModels[node.type] ? viewModels[node.type].call(this, node) : defaultViewModel.call(this, node);
+
+
+            if (mappedNode && has(node.rendered)) {
+                rendered = is(node.rendered, 'boolean') ? observable(node.rendered)
+                    : computed(function() {
+                        return evaluate(node.rendered, function (id) {
+                            if (context.getValue && has(context.getValue(id))) {
+                                return context.getValue(id);
+                            }
+                            if (id === 'role') {
+                                return core.userservice.role();
+                            }
+                            return '';
+                        })
+                    });
+            }
             if (mappedNode) {
                 mappedNode.type = mappedNode.type || node.type;
+                mappedNode.rendered = rendered;
             }
             return mappedNode;
         }
@@ -241,7 +290,27 @@ define('scalejs.metadataFactory',[
             metadataContext = this;
         } else {
             metadataContext = {
-                metadata: metadata
+                metadata: metadata,
+                // default getValue can grab from the store
+                getValue: function (id) {
+                    if (id === 'store' && core.noticeboard.global) {
+                        return ko.unwrap(core.noticeboard.global.dictionary);
+                    }
+                    if (id === '_') {
+                        return _;
+                    }
+                    if (id == 'Date') {
+                        return function (d) {
+                            return  moment(d).toDate().getTime();
+                        }
+                    }
+                    if (id == 'IncrementDate') {
+                        return function (d,t,s) {
+                            return moment(d).add(t,s).toDate().getTime();
+                        }
+                    }
+                    return identifiers[id];
+                }
             };
         }
 
@@ -276,13 +345,26 @@ define('scalejs.metadataFactory',[
     }
 
     function contextViewModel(node) {
-        core.object.extend(this, node);
+        var newContextProps = {};
+        Object.keys(node).forEach(function (prop) {
+            if (prop === 'type') { return; }
+            if (Array.isArray(node[prop])) {
+                newContextProps[prop] = observableArray(node[prop]);
+            } else {
+                newContextProps[prop] = observable(node[prop]);
+            }
+        });
+        core.object.extend(this, newContextProps);
     }
 
     function registerViewModels(newViewModels) {
         core.object.extend(viewModels, newViewModels);
     }
 
+    function registerIdentifiers(ids) {
+        core.object.extend(identifiers, ids);
+    }
+    
     function dispose(metadata) {
         // clean up clean up everybody everywhere
         ko.unwrap(metadata).forEach(function (node) {
@@ -305,61 +387,80 @@ define('scalejs.metadataFactory',[
 
         //Basic schema layout for pjson
         var schema = {
-            // '$schema': 'http://json-schema.org/draft-04/schema#',
-            'type':'object',
-            'anyOf':[]           
+        //     // '$schema': 'http://json-schema.org/draft-04/schema#',
+        //     'type':'object',
+        //     'anyOf':[]           
+        // };
+            '$schema': 'http://json-schema.org/draft-04/schema#',
+            'definitions':{
+                'template':{'type':'string','enum':[]},
+                'type':{'type':'string','enum':[]},
+                'children':{
+                    'type':'array',
+                    'items':{'$ref':'#/definitions/subObject'}
+                },
+                'options':{'type': 'object'},
+                'classes':{'type': 'string'},
+                'subObject':{
+                    'type': 'object',
+                    'properties': {
+                        'template':{'$ref':'#/definitions/template'},
+                        'type':{'$ref':'#/definitions/type'},
+                        'children':{'$ref':'#/definitions/children'},
+                        'options':{'$ref': '#/definitions/options'}
+                    }
+                }
+            },
+            'oneOf': [
+                {'$ref':'#/definitions/subObject'},
+                {'type':'array','items':{'$ref':'#/definitions/subObject'}}
+            ]
         };
         //Add all types to the schema
-        // for( var key in viewModels ){
-        //     if( key !== '' ){
-        //         schema.oneOf.push({
-        //             "type":"object",
-        //             "properties":{
-        //                 "type":{
-        //                     "type":"string",
-        //                     "enum":[key]
-        //                 },
-        //                 "children":{
-        //                     "type":"array",
-        //                     "items":{"#ref":"#"}
-        //                 }
-        //             }    
-        //         });
-        //     }
-        // }
+        for( var key in viewModels ){
+            if( key !== '' ){
+                schema.definitions.type.enum.push( key );
+            }
+        }
+        schema.definitions.type.enum.sort();
         //Add all templates to the schema
         for( var key in core.mvvm.getRegisteredTemplates() ){
             if( key !== '' ){
-                var sTemplate = {
-                    'properties':{
-                        'template':{
-                            'type':'string',
-                            'enum':[key]
-                        },
-                        'children':{
-                            'type':'array',
-                            'items':{'$ref':'#'}
-                        }
-                    }    
-                };
-                // if( schemas[key] && schemas[key].options ){
-                //     sTemplate.properties.options = {
-                //         "type":"object",
-                //         "properties":{},
-                //         "required":[]
-                //     }
-                //     for( var option in schemas[key].options ){
-                //         sTemplate.properties.options.properties[option] = 
-                //         schemas[key].options[option];
-                //         sTemplate.properties.options.required.push(option);
-                //     }
-                // }
-                schema.anyOf.push(sTemplate);
+                schema.definitions.template.enum.push( key );
             }
         }
-        
+        // for( var key in core.mvvm.getRegisteredTemplates() ){
+        //     if( key !== '' ){
+        //         var sTemplate = {
+        //             'properties':{
+        //                 'template':{
+        //                     'type':'string',
+        //                     'enum':[key]
+        //                 },
+        //                 'children':{
+        //                     'type':'array',
+        //                     'items':{'$ref':'#'}
+        //                 }
+        //             }    
+        //         };
+        //         // if( schemas[key] && schemas[key].options ){
+        //         //     sTemplate.properties.options = {
+        //         //         "type":"object",
+        //         //         "properties":{},
+        //         //         "required":[]
+        //         //     }
+        //         //     for( var option in schemas[key].options ){
+        //         //         sTemplate.properties.options.properties[option] = 
+        //         //         schemas[key].options[option];
+        //         //         sTemplate.properties.options.required.push(option);
+        //         //     }
+        //         // }
+        //         schema.anyOf.push(sTemplate);
+        //     }
+        // }
+        schema.definitions.template.enum.sort();
         return schema;
-
+        
     }
 
     ko.bindingHandlers.metadataFactory = {
@@ -425,7 +526,8 @@ define('scalejs.metadataFactory',[
             registerActions: actionModule.registerActions,
             getRegisteredActions: actionModule.getRegisteredActions,
             generateSchema: generateSchema,
-            registerSchema: registerSchema
+            registerSchema: registerSchema,
+            registerIdentifiers: registerIdentifiers
     }};
 
     core.registerExtension(metadatafactory);

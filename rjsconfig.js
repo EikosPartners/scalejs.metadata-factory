@@ -36,7 +36,11 @@ requirejs({
     'knockout.mapping': '../bower_components/knockout.mapping/knockout.mapping',
     'scalejs.functional': '../bower_components/scalejs.functional/dist/scalejs.functional.min',
     text: '../bower_components/text/text',
-    lodash: '../bower_components/lodash/lodash'
+    lodash: '../bower_components/lodash/lodash',
+    userservice: 'empty:',
+    'scalejs.expression-jsep': '../bower_components/scalejs.expression-jsep/dist/scalejs.expression-jsep',
+    jsep: '../bower_components/jsep/build/jsep',
+    moment: '../bower_components/moment/moment'
   },
   packages: [
 

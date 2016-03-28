@@ -1,23 +1,32 @@
 define([
     'scalejs!core',
     'knockout',
+    'lodash',
     'text!scalejs.metadataFactory/metadataFactory.html',
     'scalejs.metadataFactory/action/actionModule',
     'scalejs.metadataFactory/template/templateViewModel',
-    'scalejs.mvvm'
-
+    'moment',
+    'scalejs.mvvm',
+    'scalejs.expression-jsep'
 ], function (
     core,
     ko,
+    _,
     view,
     actionModule,
-    templateViewModel
+    templateViewModel,
+    moment
 ) {
     'use strict';
 
     core.mvvm.registerTemplates(view);
 
     var has = core.object.has,
+        is = core.type.is,
+        computed = ko.computed,
+        evaluate = core.expression.evaluate,
+        observable = ko.observable,
+        observableArray = ko.observableArray,
         viewModels = {
             '': defaultViewModel,
             context: contextViewModel,
@@ -27,9 +36,16 @@ define([
         schemas = {
                 
         },
+        identifiers = {},
         useDefault = true;
+        
 
     function createViewModel(node) {
+        var rendered = observable(true),
+            context = this;
+
+        node = _.cloneDeep(node); //clone the node to stop mutation issues
+
         // if(!this || !this.metadata) {
         //     console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
         // }
@@ -37,8 +53,25 @@ define([
             console.log('ignored node ', node);
         } else {
             var mappedNode = viewModels[node.type] ? viewModels[node.type].call(this, node) : defaultViewModel.call(this, node);
+
+
+            if (mappedNode && has(node.rendered)) {
+                rendered = is(node.rendered, 'boolean') ? observable(node.rendered)
+                    : computed(function() {
+                        return evaluate(node.rendered, function (id) {
+                            if (context.getValue && has(context.getValue(id))) {
+                                return context.getValue(id);
+                            }
+                            if (id === 'role') {
+                                return core.userservice.role();
+                            }
+                            return '';
+                        })
+                    });
+            }
             if (mappedNode) {
                 mappedNode.type = mappedNode.type || node.type;
+                mappedNode.rendered = rendered;
             }
             return mappedNode;
         }
@@ -57,7 +90,27 @@ define([
             metadataContext = this;
         } else {
             metadataContext = {
-                metadata: metadata
+                metadata: metadata,
+                // default getValue can grab from the store
+                getValue: function (id) {
+                    if (id === 'store' && core.noticeboard.global) {
+                        return ko.unwrap(core.noticeboard.global.dictionary);
+                    }
+                    if (id === '_') {
+                        return _;
+                    }
+                    if (id == 'Date') {
+                        return function (d) {
+                            return  moment(d).toDate().getTime();
+                        }
+                    }
+                    if (id == 'IncrementDate') {
+                        return function (d,t,s) {
+                            return moment(d).add(t,s).toDate().getTime();
+                        }
+                    }
+                    return identifiers[id];
+                }
             };
         }
 
@@ -92,13 +145,26 @@ define([
     }
 
     function contextViewModel(node) {
-        core.object.extend(this, node);
+        var newContextProps = {};
+        Object.keys(node).forEach(function (prop) {
+            if (prop === 'type') { return; }
+            if (Array.isArray(node[prop])) {
+                newContextProps[prop] = observableArray(node[prop]);
+            } else {
+                newContextProps[prop] = observable(node[prop]);
+            }
+        });
+        core.object.extend(this, newContextProps);
     }
 
     function registerViewModels(newViewModels) {
         core.object.extend(viewModels, newViewModels);
     }
 
+    function registerIdentifiers(ids) {
+        core.object.extend(identifiers, ids);
+    }
+    
     function dispose(metadata) {
         // clean up clean up everybody everywhere
         ko.unwrap(metadata).forEach(function (node) {
@@ -121,61 +187,80 @@ define([
 
         //Basic schema layout for pjson
         var schema = {
-            // '$schema': 'http://json-schema.org/draft-04/schema#',
-            'type':'object',
-            'anyOf':[]           
+        //     // '$schema': 'http://json-schema.org/draft-04/schema#',
+        //     'type':'object',
+        //     'anyOf':[]           
+        // };
+            '$schema': 'http://json-schema.org/draft-04/schema#',
+            'definitions':{
+                'template':{'type':'string','enum':[]},
+                'type':{'type':'string','enum':[]},
+                'children':{
+                    'type':'array',
+                    'items':{'$ref':'#/definitions/subObject'}
+                },
+                'options':{'type': 'object'},
+                'classes':{'type': 'string'},
+                'subObject':{
+                    'type': 'object',
+                    'properties': {
+                        'template':{'$ref':'#/definitions/template'},
+                        'type':{'$ref':'#/definitions/type'},
+                        'children':{'$ref':'#/definitions/children'},
+                        'options':{'$ref': '#/definitions/options'}
+                    }
+                }
+            },
+            'oneOf': [
+                {'$ref':'#/definitions/subObject'},
+                {'type':'array','items':{'$ref':'#/definitions/subObject'}}
+            ]
         };
         //Add all types to the schema
-        // for( var key in viewModels ){
-        //     if( key !== '' ){
-        //         schema.oneOf.push({
-        //             "type":"object",
-        //             "properties":{
-        //                 "type":{
-        //                     "type":"string",
-        //                     "enum":[key]
-        //                 },
-        //                 "children":{
-        //                     "type":"array",
-        //                     "items":{"#ref":"#"}
-        //                 }
-        //             }    
-        //         });
-        //     }
-        // }
+        for( var key in viewModels ){
+            if( key !== '' ){
+                schema.definitions.type.enum.push( key );
+            }
+        }
+        schema.definitions.type.enum.sort();
         //Add all templates to the schema
         for( var key in core.mvvm.getRegisteredTemplates() ){
             if( key !== '' ){
-                var sTemplate = {
-                    'properties':{
-                        'template':{
-                            'type':'string',
-                            'enum':[key]
-                        },
-                        'children':{
-                            'type':'array',
-                            'items':{'$ref':'#'}
-                        }
-                    }    
-                };
-                // if( schemas[key] && schemas[key].options ){
-                //     sTemplate.properties.options = {
-                //         "type":"object",
-                //         "properties":{},
-                //         "required":[]
-                //     }
-                //     for( var option in schemas[key].options ){
-                //         sTemplate.properties.options.properties[option] = 
-                //         schemas[key].options[option];
-                //         sTemplate.properties.options.required.push(option);
-                //     }
-                // }
-                schema.anyOf.push(sTemplate);
+                schema.definitions.template.enum.push( key );
             }
         }
-        
+        // for( var key in core.mvvm.getRegisteredTemplates() ){
+        //     if( key !== '' ){
+        //         var sTemplate = {
+        //             'properties':{
+        //                 'template':{
+        //                     'type':'string',
+        //                     'enum':[key]
+        //                 },
+        //                 'children':{
+        //                     'type':'array',
+        //                     'items':{'$ref':'#'}
+        //                 }
+        //             }    
+        //         };
+        //         // if( schemas[key] && schemas[key].options ){
+        //         //     sTemplate.properties.options = {
+        //         //         "type":"object",
+        //         //         "properties":{},
+        //         //         "required":[]
+        //         //     }
+        //         //     for( var option in schemas[key].options ){
+        //         //         sTemplate.properties.options.properties[option] = 
+        //         //         schemas[key].options[option];
+        //         //         sTemplate.properties.options.required.push(option);
+        //         //     }
+        //         // }
+        //         schema.anyOf.push(sTemplate);
+        //     }
+        // }
+        schema.definitions.template.enum.sort();
         return schema;
-
+        
     }
 
     ko.bindingHandlers.metadataFactory = {
@@ -241,7 +326,8 @@ define([
             registerActions: actionModule.registerActions,
             getRegisteredActions: actionModule.getRegisteredActions,
             generateSchema: generateSchema,
-            registerSchema: registerSchema
+            registerSchema: registerSchema,
+            registerIdentifiers: registerIdentifiers
     }};
 
     core.registerExtension(metadatafactory);
