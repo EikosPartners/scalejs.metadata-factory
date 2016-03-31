@@ -190,18 +190,17 @@ define([
         var schema = {
             '$schema': 'http://json-schema.org/draft-04/schema#',
             'definitions':{
-                // 'template':{'type':'string','enum':[]},
-                // 'type':{'type':'string','enum':[]},
-                'templateOptions': {
-                    'oneOf': [
-                        {'not':{'required':['template']}}
+                'template':{'type':'string'},
+                'type':{'type':'string'},
+                'templateExt':{
+                    'oneOf':[
+                        // case where no template is provided
+                        {'not':{'required':['template']}} 
                     ]
                 },
-                'templateOther': {},
-                'typeOptions': {
-                    'oneOf': []
+                'typeExt':{
+                    'oneOf':[]
                 },
-                'typeOther': {},
                 'children':{
                     'type':'array',
                     'items':{'$ref':'#/definitions/subObject'}
@@ -209,21 +208,21 @@ define([
                 'options':{'type': 'object'},
                 'classes':{'type': 'string'},
                 'subObject':{
-                    'allOf': [
+                    'allOf':[
                         {
+                            // Base properties
                             'type':'object',
                             'properties':{
-                                // 'template':{'$ref':'#/definitions/template'},
-                                // 'type':{'$ref':'#/definitions/type'},
-                                'template': {},
-                                'type': {},
+                                'template':{}, // makes sure template/type show up as options
+                                'type':{},
                                 'children':{'$ref':'#/definitions/children'},
                                 'options':{'$ref':'#/definitions/options'}
                             },
                             'required':['type']
                         },
-                        {'$ref':'#/definitions/typeOptions'},
-                        {'$ref':'#/definitions/templateOptions'}
+                        // populates templates, types, and corresponding options
+                        {'$ref':'#/definitions/typeExt'},
+                        {'$ref':'#/definitions/templateExt'}
                     ]
                 }
             },
@@ -238,8 +237,8 @@ define([
         var otherTemplates = [];
         for( var key in core.mvvm.getRegisteredTemplates() ){
             if( key !== '' ){
-                // schema.definitions.template.enum.push( key );
                 if(schemas.hasOwnProperty(key)) {
+                    // Add extended templates
                     option = {
                         'properties':{
                             'template':{'enum':[key]},
@@ -248,9 +247,9 @@ define([
                                 'properties':schemas[key]
                             }
                         },
-                        'required':['template']
+                        'required':['template'] // ensures matching template
                     }
-                    schema.definitions.templateOptions.oneOf.push(option);
+                    schema.definitions.templateExt.oneOf.push(option);
                 }
                 else {
                     otherTemplates.push(key);
@@ -258,24 +257,23 @@ define([
             }
         }
         if (otherTemplates.length > 0) {
-            schema.definitions.templateOther = {'enum':otherTemplates};
+            // Add regular templates
+            schema.definitions.template.enum = otherTemplates;
             option = {
                 'properties':{
-                    'template':{'$ref':'#/definitions/templateOther'}
+                    'template':{'$ref':'#/definitions/template'}
                 },
-                'required':['template']
+                'required':['template'] // ensures matching template
             }
-            
-            schema.definitions.templateOptions.oneOf.push(option);
+            schema.definitions.templateExt.oneOf.push(option);
         }
-        // schema.definitions.template.enum.sort();
         
         //Add all types to the schema
         var otherTypes = [];
         for( var key in viewModels ){
             if( key !== '' ){
-                // schema.definitions.type.enum.push( key );
                 if (schemas.hasOwnProperty(key+'_template')) {
+                    // Add extended types
                     var option = {
                         'properties':{
                             'type':{'enum':[key]},
@@ -285,7 +283,7 @@ define([
                             }
                         }
                     }
-                    schema.definitions.typeOptions.oneOf.push(option);
+                    schema.definitions.typeExt.oneOf.push(option);
                 }
                 else {
                     otherTypes.push(key);
@@ -293,15 +291,15 @@ define([
             }
         }
         if (otherTypes.length > 0) {
-            schema.definitions.typeOther = {'enum':otherTypes};
+            // Add regular types
+            schema.definitions.type.enum = otherTypes;
             option = {
                 'properties':{
-                    'type':{'$ref':'#/definitions/typeOther'}
+                'type':{'$ref':'#/definitions/type'}
                 }
             }
-            schema.definitions.typeOptions.oneOf.push(option);
+            schema.definitions.typeExt.oneOf.push(option);
         }
-        // schema.definitions.type.enum.sort();
               
         return schema;
         
