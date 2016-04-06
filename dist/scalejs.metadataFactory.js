@@ -18,6 +18,7 @@ define('scalejs.metadataFactory/action/bindings/actionBindings.js',{
             click: function() {
                 this.action();
             },
+            disable: this.disabled,
             css: classes
         }
     }
@@ -42,7 +43,8 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
     var merge = core.object.merge,
         notify = core.reactive.messageBus.notify,
         observable = ko.observable,
-        unwrap = ko.unwrap;
+        unwrap = ko.unwrap,
+        has = core.object.has;
         
     core.mvvm.registerTemplates(view);
     core.mvvm.registerBindings(binding);
@@ -64,6 +66,7 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
             mergedActions = core.object.extend(actions, registeredActions),
             actionFunc = mergedActions[actionType] || null,
             isShown = observable(true),
+            disabled = observable(has(options.disabled) ? options.disabled : false),
             context = this;
 
         if (actionFunc) {
@@ -103,6 +106,7 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
             text: text,
             actionType: actionType,
             options: options,
+            disabled: disabled,
             context: context
         });
 

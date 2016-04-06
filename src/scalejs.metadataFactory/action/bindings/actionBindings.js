@@ -12,6 +12,7 @@ define({
             click: function() {
                 this.action();
             },
+            disable: this.disabled,
             css: classes
         }
     }
