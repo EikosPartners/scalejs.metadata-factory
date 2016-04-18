@@ -100,6 +100,12 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
                 })
             }
         }
+        
+        if (node.immediate) {
+            action();
+            return;
+        }
+        
         return merge(node, {
             isShown: isShown,
             action: action,
