@@ -47,7 +47,7 @@ define([
             actionFunc = actionFunc.bind(this);
         }
 
-        function action() {
+        function action(args) {
             if (!actionFunc){
                 console.error('actions[actionType] is not defined', node);
                 return;
@@ -55,11 +55,12 @@ define([
 
             if (validate) {
                 notify(validate, {
-                    successCallback: actionFunc,
-                    options: options
+                    successCallback: function () {
+                        actionFunc(options, args);
+                    }
                 });
             } else {
-                actionFunc(options, arguments);
+                actionFunc(options, args);
             }
         }
 
