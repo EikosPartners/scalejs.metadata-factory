@@ -18,6 +18,7 @@ define([
             context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
             createViewModel = core.metadataFactory.createViewModel.bind(context), // passes context
             createViewModels = core.metadataFactory.createViewModels.bind(context), // passes context
+            registeredTemplates = core.mvvm.getRegisteredTemplates(),
             // properties
             isShown = observable(node.visible !== false),
             //visible = observable(),
@@ -28,6 +29,12 @@ define([
         function getValue(key) {
             return (data() || {})[key];
         }
+        
+        if (node.template && !registeredTemplates[node.template]) {
+            console.error('Template not registered ', node.template);
+            node.template = 'no_template';
+        }
+
 
         mappedChildNodes = createViewModels(node.children || []);
 

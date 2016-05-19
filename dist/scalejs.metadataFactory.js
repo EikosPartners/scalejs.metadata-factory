@@ -1,5 +1,5 @@
 
-define('text!scalejs.metadataFactory/metadataFactory.html',[],function () { return '<div id="metadata_items_template">\r\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\r\n\r\n    <!--/ko -->\r\n</div>\r\n\r\n<div id="metadata_item_template">\r\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\r\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id="metadata_default_template">\r\n    <div data-bind="text: JSON.stringify($data)"></div>\r\n</div>\r\n\r\n<div id="metadata_loading_template">\r\n    <div class="loader hexdots-loader">\r\n    loading...\r\n    </div>\r\n</div>';});
+define('text!scalejs.metadataFactory/metadataFactory.html',[],function () { return '<div id="metadata_items_template">\r\n    <!-- ko template: { name: \'metadata_item_template\', foreach: $data } -->\r\n\r\n    <!--/ko -->\r\n</div>\r\n\r\n<div id="metadata_item_template">\r\n    <!-- ko comment: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\r\n    <!-- ko template: $data.template || $data.type + \'_template\' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id="metadata_default_template">\r\n    <div data-bind="text: JSON.stringify($data)"></div>\r\n</div>\r\n\r\n<div id="metadata_loading_template">\r\n    <div class="loader hexdots-loader">\r\n    loading...\r\n    </div>\r\n</div>\r\n\r\n<div id="no_template">    \r\n    <div data-bind="template: { name: \'metadata_items_template\', data: mappedChildNodes}"></div>\r\n</div>\r\n';});
 
 
 define('text!scalejs.metadataFactory/action/views/action.html',[],function () { return '<div id="action_template">\r\n    <div data-bind="css: $data.classes, visible:isShown" class="action-button-wrapper">\r\n        <button data-class="action-button">\r\n            <span data-bind="text: text"></span>\r\n        </button>\r\n    </div>\r\n</div>\r\n';});
@@ -167,6 +167,7 @@ define('scalejs.metadataFactory/template/templateViewModel',[
             context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
             createViewModel = core.metadataFactory.createViewModel.bind(context), // passes context
             createViewModels = core.metadataFactory.createViewModels.bind(context), // passes context
+            registeredTemplates = core.mvvm.getRegisteredTemplates(),
             // properties
             isShown = observable(node.visible !== false),
             //visible = observable(),
@@ -177,6 +178,12 @@ define('scalejs.metadataFactory/template/templateViewModel',[
         function getValue(key) {
             return (data() || {})[key];
         }
+        
+        if (node.template && !registeredTemplates[node.template]) {
+            console.error('Template not registered ', node.template);
+            node.template = 'no_template';
+        }
+
 
         mappedChildNodes = createViewModels(node.children || []);
 
