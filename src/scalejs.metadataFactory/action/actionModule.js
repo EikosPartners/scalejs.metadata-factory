@@ -1,6 +1,6 @@
 /*global define, actionViewModel, sandbox,core,  avm  */
 define([
-    'scalejs!core',
+    'scalejs.core',
     'scalejs.metadataFactory/action/viewmodels/actionViewModel',
     'scalejs.mvvm'
 ], function (

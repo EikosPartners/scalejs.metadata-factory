@@ -1,6 +1,6 @@
 /*global define, core, _, ko */
 define([
-    'scalejs!core',
+    'scalejs.core',
     'lodash',
     'knockout'
 
