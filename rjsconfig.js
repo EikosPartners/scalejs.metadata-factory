@@ -5,15 +5,20 @@ requirejs({
 
     ]
   },
+  map: {
+    '*': {
+      'scalejs.core': 'empty:'
+    }
+  },
   paths: {
     requirejs: '../bower_components/requirejs/require',
-    scalejs: '../bower_components/scalejs/dist/scalejs.min',
+    scalejs: '../bower_components/scalejs/dist/scalejs',
     knockout: '../bower_components/knockout/dist/knockout',
     'scalejs.mvvm': '../bower_components/scalejs.mvvm/dist/scalejs.mvvm',
     'scalejs.mvvm.views': '../bower_components/scalejs.mvvm/dist/scalejs.mvvm',
     'scalejs.mvvm.bindings': '../bower_components/scalejs.mvvm/dist/scalejs.mvvm',
     almond: '../bower_components/almond/almond',
-    'scalejs.ajax-jquery': '../bower_components/scalejs.ajax-jquery/dist/scalejs.ajax-jquery.min',
+    'scalejs.ajax-jquery': '../bower_components/scalejs.ajax-jquery/dist/scalejs.ajax-jquery',
     jquery: '../bower_components/jquery/dist/jquery',
     'scalejs.reactive': '../bower_components/scalejs.reactive/dist/scalejs.reactive.min',
     'rx.all': '../bower_components/rxjs/dist/rx.all.min',
@@ -40,7 +45,10 @@ requirejs({
     userservice: 'empty:',
     'scalejs.expression-jsep': '../bower_components/scalejs.expression-jsep/dist/scalejs.expression-jsep',
     jsep: '../bower_components/jsep/build/jsep',
-    moment: '../bower_components/moment/moment'
+    moment: '../bower_components/moment/moment',
+    'scalejs.application': '../bower_components/scalejs/src/scalejs.application',
+    'scalejs.core': '../bower_components/scalejs/src/scalejs.core',
+    'scalejs.sandbox': '../bower_components/scalejs/src/scalejs.sandbox'
   },
   packages: [
 

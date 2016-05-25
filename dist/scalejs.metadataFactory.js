@@ -26,7 +26,7 @@ define('scalejs.metadataFactory/action/bindings/actionBindings.js',{
 
 /*global define, ko, core, view, binding */
 define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
-    'scalejs!core',
+    'scalejs.core',
     'knockout',
     'text!scalejs.metadataFactory/action/views/action.html',
     'scalejs.metadataFactory/action/bindings/actionBindings.js',
@@ -122,7 +122,7 @@ define('scalejs.metadataFactory/action/viewmodels/actionViewModel',[
 
 /*global define, actionViewModel, sandbox,core,  avm  */
 define('scalejs.metadataFactory/action/actionModule',[
-    'scalejs!core',
+    'scalejs.core',
     'scalejs.metadataFactory/action/viewmodels/actionViewModel',
     'scalejs.mvvm'
 ], function (
@@ -149,7 +149,7 @@ define('scalejs.metadataFactory/action/actionModule',[
 });
 /*global define, core, _, ko */
 define('scalejs.metadataFactory/template/templateViewModel',[
-    'scalejs!core',
+    'scalejs.core',
     'lodash',
     'knockout'
 
@@ -217,7 +217,7 @@ define('scalejs.metadataFactory/template/templateViewModel',[
 });
 
 define('scalejs.metadataFactory',[
-    'scalejs!core',
+    'scalejs.core',
     'knockout',
     'lodash',
     'text!scalejs.metadataFactory/metadataFactory.html',
