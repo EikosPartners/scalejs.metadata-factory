@@ -1,8 +1,8 @@
 /*global define, ko, core, view, binding */
-import core from 'scalejs!core';
+import core from 'scalejs.core';
 import ko from 'knockout';
-import view from 'text!scalejs.metadataFactory/action/views/action.html';
-import binding from 'scalejs.metadataFactory/action/bindings/actionBindings.js';
+import view from 'html!scalejs.metadataFactory/action/views/action.html';
+import binding from './scalejs.metadataFactory/action/bindings/actionBindings.js';
 import 'scalejs.reactive';
 import 'scalejs.mvvm';
 

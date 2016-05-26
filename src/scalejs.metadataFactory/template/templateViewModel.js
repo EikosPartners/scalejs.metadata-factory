@@ -1,5 +1,5 @@
 /*global define, core, _, ko */
-import core from 'scalejs!core';
+import core from 'scalejs.core';
 import _ from 'lodash';
 import ko from 'knockout';
 

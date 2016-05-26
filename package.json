@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "almond": "^0.3.2",
+    "knockout": "^3.4.0",
     "lodash": "^4.13.1",
     "moment": "^2.13.0",
     "scalejs": "git://github.com/EikosPartners/scalejs.git#es6",
