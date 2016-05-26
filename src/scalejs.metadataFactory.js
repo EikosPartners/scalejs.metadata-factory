@@ -1,9 +1,7 @@
-import core from 'scalejs.core';
+import core from 'scalejs';
 import ko from 'knockout';
 import _ from 'lodash';
-import view from 'html!./scalejs.metadataFactory/metadataFactory.html';
-import actionModule from './scalejs.metadataFactory/action/actionModule';
-import templateViewModel from './scalejs.metadataFactory/template/templateViewModel';
+import view from 'html!./views/metadataFactory.html';
 import moment from 'moment';
 import 'scalejs.mvvm';
 import 'scalejs.expression-jsep';
@@ -19,9 +17,7 @@ var has = core.object.has,
     observableArray = ko.observableArray,
     viewModels = {
         '': defaultViewModel,
-        context: contextViewModel,
-        action: actionModule.action,
-        template: templateViewModel
+        context: contextViewModel
     },
     schemas = {
 
@@ -389,8 +385,6 @@ var metadatafactory = {
         createViewModels: createViewModels,
         createViewModel: createViewModel,
         useDefault: useDefault,
-        registerActions: actionModule.registerActions,
-        getRegisteredActions: actionModule.getRegisteredActions,
         generateSchema: generateSchema,
         registerSchema: registerSchema,
         registerIdentifiers: registerIdentifiers
