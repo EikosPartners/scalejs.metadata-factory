@@ -213,6 +213,10 @@
 	    _scalejs2.default.object.extend(viewModels, newViewModels);
 	}
 
+	function getRegisteredTypes() {
+	    return Object.keys(viewModels);
+	}
+
 	function registerIdentifiers(ids) {
 	    _scalejs2.default.object.extend(identifiers, ids);
 	}
