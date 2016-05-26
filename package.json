@@ -1,25 +1,39 @@
 {
   "name": "scalejs.metadataFactory",
+  "scripts": {
+    "build": "babel src --presets babel-preset-es2015 --out-dir dist",
+    "prepublish": "npm run build"
+  },
+  "main": "dist/scalejs.metadataFactory.js",
   "version": "0.0.0",
   "devDependencies": {
-    "bower": "^1.3.9",
+    "babel-cli": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
     "coffeelint": "^1.6.0",
     "coffeelint-newline-at-eof": "^0.4.1",
-    "jshint-stylish": "^0.4.0",
     "grunt": "^0.4.0",
     "grunt-bower-requirejs": "^1.1.0",
     "grunt-coffeelint": "0.0.13",
     "grunt-contrib-coffee": "^0.11.1",
+    "grunt-contrib-connect": "~0.8.0",
     "grunt-contrib-copy": "^0.5.0",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-contrib-requirejs": "^0.4.4",
+    "grunt-contrib-uglify": "^0.5.1",
     "grunt-curl": "^2.0.3",
     "grunt-if-missing": "^1.0.0",
-    "grunt-contrib-uglify": "^0.5.1",
-    "grunt-contrib-connect": "~0.8.0",
-    "load-grunt-config": "~0.13.1",
-    "time-grunt": "~1.0.0",
     "grunt-newer": "~0.7.0",
-    "rjs-build-analysis": "0.0.3"
+    "jshint-stylish": "^0.4.0",
+    "load-grunt-config": "~0.13.1",
+    "rjs-build-analysis": "0.0.3",
+    "time-grunt": "~1.0.0"
+  },
+  "dependencies": {
+    "almond": "^0.3.2",
+    "lodash": "^4.13.1",
+    "moment": "^2.13.0",
+    "scalejs": "git://github.com/EikosPartners/scalejs.git#es6",
+    "scalejs.expression-jsep": "git://github.com/EikosPartners/scalejs.expression-jsep.git",
+    "scalejs.mvvm": "git://github.com/EikosPartners/scalejs.mvvm.git"
   }
 }
