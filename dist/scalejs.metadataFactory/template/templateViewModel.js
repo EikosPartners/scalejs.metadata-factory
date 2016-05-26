@@ -5,9 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = templateViewModel;
 
-var _scalejsCore = require('scalejs!core');
+var _scalejs = require('scalejs.core');
 
-var _scalejsCore2 = _interopRequireDefault(_scalejsCore);
+var _scalejs2 = _interopRequireDefault(_scalejs);
 
 var _lodash = require('lodash');
 
@@ -21,17 +21,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function templateViewModel(node) {
     var observable = _knockout2.default.observable,
-        merge = _scalejsCore2.default.object.merge,
+        merge = _scalejs2.default.object.merge,
         data = observable(node.data || {}),
         context = node.options && node.options.createContext ? {
         metadata: [],
         data: data
     } : this,
-        createViewModel = _scalejsCore2.default.metadataFactory.createViewModel.bind(context),
+        createViewModel = _scalejs2.default.metadataFactory.createViewModel.bind(context),
         // passes context
-    createViewModels = _scalejsCore2.default.metadataFactory.createViewModels.bind(context),
+    createViewModels = _scalejs2.default.metadataFactory.createViewModels.bind(context),
         // passes context
-    registeredTemplates = _scalejsCore2.default.mvvm.getRegisteredTemplates(),
+    registeredTemplates = _scalejs2.default.mvvm.getRegisteredTemplates(),
 
     // properties
     isShown = observable(node.visible !== false),

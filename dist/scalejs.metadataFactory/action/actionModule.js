@@ -4,11 +4,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _scalejsCore = require('scalejs!core');
+var _scalejs = require('scalejs.core');
 
-var _scalejsCore2 = _interopRequireDefault(_scalejsCore);
+var _scalejs2 = _interopRequireDefault(_scalejs);
 
-var _actionViewModel = require('scalejs.metadataFactory/action/viewmodels/actionViewModel');
+var _actionViewModel = require('./scalejs.metadataFactory/action/viewmodels/actionViewModel');
 
 var _actionViewModel2 = _interopRequireDefault(_actionViewModel);
 
@@ -25,7 +25,7 @@ function getRegisteredActions() {
 }
 
 function registerActions(actions) {
-    _scalejsCore2.default.object.extend(registeredActions, actions);
+    _scalejs2.default.object.extend(registeredActions, actions);
 }
 
 exports.default = {

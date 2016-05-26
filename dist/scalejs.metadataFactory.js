@@ -16,15 +16,15 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _metadataFactory = require('html!scalejs.metadataFactory/metadataFactory.html');
+var _metadataFactory = require('text!./scalejs.metadataFactory/metadataFactory.html');
 
 var _metadataFactory2 = _interopRequireDefault(_metadataFactory);
 
-var _actionModule = require('scalejs.metadataFactory/action/actionModule');
+var _actionModule = require('./scalejs.metadataFactory/action/actionModule');
 
 var _actionModule2 = _interopRequireDefault(_actionModule);
 
-var _templateViewModel = require('scalejs.metadataFactory/template/templateViewModel');
+var _templateViewModel = require('./scalejs.metadataFactory/template/templateViewModel');
 
 var _templateViewModel2 = _interopRequireDefault(_templateViewModel);
 
