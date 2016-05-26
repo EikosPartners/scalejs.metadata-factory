@@ -16,7 +16,7 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _metadataFactory = require('text!./scalejs.metadataFactory/metadataFactory.html');
+var _metadataFactory = require('html!./scalejs.metadataFactory/metadataFactory.html');
 
 var _metadataFactory2 = _interopRequireDefault(_metadataFactory);
 

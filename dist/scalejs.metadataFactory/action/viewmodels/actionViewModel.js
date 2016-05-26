@@ -13,11 +13,11 @@ var _knockout = require('knockout');
 
 var _knockout2 = _interopRequireDefault(_knockout);
 
-var _action = require('html!./views/action.html');
+var _action = require('html!../views/action.html');
 
 var _action2 = _interopRequireDefault(_action);
 
-var _actionBindings = require('./bindings/actionBindings.js');
+var _actionBindings = require('../bindings/actionBindings.js');
 
 var _actionBindings2 = _interopRequireDefault(_actionBindings);
 
