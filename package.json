@@ -1,10 +1,10 @@
 {
   "name": "scalejs.metadataFactory",
   "scripts": {
-    "build": "babel src --presets babel-preset-es2015 --out-dir dist",
+    "build": " webpack && babel src --presets babel-preset-es2015 --out-dir dist",
     "prepublish": "npm run build"
   },
-  "main": "dist/scalejs.metadataFactory.js",
+  "main": "dist/bundle.js",
   "version": "0.0.0",
   "devDependencies": {
     "babel-cli": "^6.9.0",
