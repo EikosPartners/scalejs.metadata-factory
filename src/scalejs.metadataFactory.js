@@ -148,6 +148,10 @@ function registerViewModels(newViewModels) {
     core.object.extend(viewModels, newViewModels);
 }
 
+function getRegisteredTypes() {
+    return Object.keys(viewModels);
+}
+
 function registerIdentifiers(ids) {
     core.object.extend(identifiers, ids);
 }
