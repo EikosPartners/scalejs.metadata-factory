@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _scalejsCore = require('scalejs!core');
+var _scalejs = require('scalejs.core');
 
-var _scalejsCore2 = _interopRequireDefault(_scalejsCore);
+var _scalejs2 = _interopRequireDefault(_scalejs);
 
 var _knockout = require('knockout');
 
@@ -16,7 +16,7 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _metadataFactory = require('text!scalejs.metadataFactory/metadataFactory.html');
+var _metadataFactory = require('html!scalejs.metadataFactory/metadataFactory.html');
 
 var _metadataFactory2 = _interopRequireDefault(_metadataFactory);
 
@@ -38,12 +38,12 @@ require('scalejs.expression-jsep');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_scalejsCore2.default.mvvm.registerTemplates(_metadataFactory2.default);
+_scalejs2.default.mvvm.registerTemplates(_metadataFactory2.default);
 
-var has = _scalejsCore2.default.object.has,
-    is = _scalejsCore2.default.type.is,
+var has = _scalejs2.default.object.has,
+    is = _scalejs2.default.type.is,
     computed = _knockout2.default.computed,
-    evaluate = _scalejsCore2.default.expression.evaluate,
+    evaluate = _scalejs2.default.expression.evaluate,
     observable = _knockout2.default.observable,
     observableArray = _knockout2.default.observableArray,
     viewModels = {
@@ -77,7 +77,7 @@ function createViewModel(node) {
                         return context.getValue(id);
                     }
                     if (id === 'role') {
-                        return _scalejsCore2.default.userservice.role();
+                        return _scalejs2.default.userservice.role();
                     }
                     return '';
                 });
@@ -107,8 +107,8 @@ function createViewModels(metadata) {
             metadata: metadata,
             // default getValue can grab from the store
             getValue: function getValue(id) {
-                if (id === 'store' && _scalejsCore2.default.noticeboard.global) {
-                    return _knockout2.default.unwrap(_scalejsCore2.default.noticeboard.global.dictionary);
+                if (id === 'store' && _scalejs2.default.noticeboard.global) {
+                    return _knockout2.default.unwrap(_scalejs2.default.noticeboard.global.dictionary);
                 }
                 if (id === '_') {
                     return _lodash2.default;
@@ -138,7 +138,7 @@ function createViewModels(metadata) {
 
 function createTemplate(metadata, context) {
     if (!metadata) {
-        return _scalejsCore2.default.mvvm.template('metadata_loading_template');
+        return _scalejs2.default.mvvm.template('metadata_loading_template');
     }
     if (!Array.isArray(metadata)) {
         metadata = [metadata];
@@ -146,14 +146,14 @@ function createTemplate(metadata, context) {
 
     var viewModels = !context ? createViewModels(metadata) : createViewModels.call(context, metadata);
 
-    return _scalejsCore2.default.mvvm.template('metadata_items_template', viewModels);
+    return _scalejs2.default.mvvm.template('metadata_items_template', viewModels);
 }
 
 function defaultViewModel(node) {
     if (!useDefault) {
         return;
     }
-    return _scalejsCore2.default.object.merge(node, {
+    return _scalejs2.default.object.merge(node, {
         template: 'metadata_default_template'
     });
 }
@@ -170,15 +170,15 @@ function contextViewModel(node) {
             newContextProps[prop] = observable(node[prop]);
         }
     });
-    _scalejsCore2.default.object.extend(this, newContextProps);
+    _scalejs2.default.object.extend(this, newContextProps);
 }
 
 function registerViewModels(newViewModels) {
-    _scalejsCore2.default.object.extend(viewModels, newViewModels);
+    _scalejs2.default.object.extend(viewModels, newViewModels);
 }
 
 function registerIdentifiers(ids) {
-    _scalejsCore2.default.object.extend(identifiers, ids);
+    _scalejs2.default.object.extend(identifiers, ids);
 }
 
 function dispose(metadata) {
@@ -273,7 +273,7 @@ function generateSchema() {
     //Add all templates to the schema
     var option;
     var otherTemplates = [];
-    for (var key in _scalejsCore2.default.mvvm.getRegisteredTemplates()) {
+    for (var key in _scalejs2.default.mvvm.getRegisteredTemplates()) {
         if (key !== '') {
             if (schemas.hasOwnProperty(key)) {
                 // Add extended templates
@@ -405,5 +405,5 @@ var metadatafactory = {
     }
 };
 
-_scalejsCore2.default.registerExtension(metadatafactory);
+_scalejs2.default.registerExtension(metadatafactory);
 exports.default = metadatafactory;
