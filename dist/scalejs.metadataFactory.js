@@ -426,21 +426,18 @@
 	    }
 
 	};
-	var metadatafactory = {
+
+	exports.default = _scalejs2.default.registerExtension({
 	    metadataFactory: {
 	        createTemplate: createTemplate,
 	        registerViewModels: registerViewModels,
 	        createViewModels: createViewModels,
 	        createViewModel: createViewModel,
 	        useDefault: useDefault,
-	        generateSchema: generateSchema,
-	        registerSchema: registerSchema,
-	        registerIdentifiers: registerIdentifiers
+	        registerIdentifiers: registerIdentifiers,
+	        getRegisteredTypes: getRegisteredTypes
 	    }
-	};
-
-	_scalejs2.default.registerExtension(metadatafactory);
-	exports.default = metadatafactory;
+	});
 
 /***/ },
 /* 1 */

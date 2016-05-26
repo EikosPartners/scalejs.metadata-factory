@@ -378,18 +378,15 @@ ko.bindingHandlers.metadataFactory = {
     }
 
 }
-var metadatafactory = {
-    metadataFactory: {
-        createTemplate: createTemplate,
-        registerViewModels: registerViewModels,
-        createViewModels: createViewModels,
-        createViewModel: createViewModel,
-        useDefault: useDefault,
-        generateSchema: generateSchema,
-        registerSchema: registerSchema,
-        registerIdentifiers: registerIdentifiers
-    }
-};
 
-core.registerExtension(metadatafactory);
-export default metadatafactory;
+export default core.registerExtension({
+        metadataFactory: {
+            createTemplate,
+            registerViewModels,
+            createViewModels,
+            createViewModel,
+            useDefault,
+            registerIdentifiers,
+            getRegisteredTypes
+        }
+    })
