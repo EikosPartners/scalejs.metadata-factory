@@ -1,6 +1,6 @@
 /*global define, actionViewModel, sandbox,core,  avm  */
 import core from 'scalejs.core';
-import avm from './scalejs.metadataFactory/action/viewmodels/actionViewModel';
+import avm from './viewmodels/actionViewModel';
 import 'scalejs.mvvm';
 
 var actionViewModel = avm,

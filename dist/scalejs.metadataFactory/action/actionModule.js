@@ -8,7 +8,7 @@ var _scalejs = require('scalejs.core');
 
 var _scalejs2 = _interopRequireDefault(_scalejs);
 
-var _actionViewModel = require('./scalejs.metadataFactory/action/viewmodels/actionViewModel');
+var _actionViewModel = require('./viewmodels/actionViewModel');
 
 var _actionViewModel2 = _interopRequireDefault(_actionViewModel);
 
