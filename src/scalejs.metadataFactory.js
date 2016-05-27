@@ -6,7 +6,6 @@ import moment from 'moment';
 import 'scalejs.mvvm';
 import 'scalejs.expression-jsep';
 
-
 core.mvvm.registerTemplates(view);
 
 var has = core.object.has,

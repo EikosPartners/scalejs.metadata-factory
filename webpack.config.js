@@ -1,15 +1,13 @@
 var path = require('path');
+var nodeExternals = require('webpack-node-externals');
 module.exports = {
     entry: "./src/scalejs.metadataFactory.js",
     output: {
         path: 'dist',
         filename: "scalejs.metadataFactory.js"
     },
-     resolve: {
-        alias: {
-            'scalejs.core': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.core.js')
-        }
-    },
+    target: 'node',
+    externals: [nodeExternals()],
     module: {
         loaders: [
             {
