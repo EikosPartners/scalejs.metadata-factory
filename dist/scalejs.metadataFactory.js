@@ -49,7 +49,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.getRegisteredTypes = exports.registerIdentifiers = exports.useDefault = exports.createViewModel = exports.createViewModels = exports.registerViewModels = exports.createTemplate = undefined;
 
 	__webpack_require__(1);
 
@@ -78,7 +77,6 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var core = _scalejs2.default.core;
-
 	core.mvvm.registerTemplates(_metadataFactory2.default);
 
 	var has = core.object.has,
@@ -434,8 +432,7 @@
 
 	};
 
-	// legacy: registering to core
-	core.registerExtension({
+	exports.default = core.registerExtension({
 	    metadataFactory: {
 	        createTemplate: createTemplate,
 	        registerViewModels: registerViewModels,
@@ -446,14 +443,6 @@
 	        getRegisteredTypes: getRegisteredTypes
 	    }
 	});
-
-	exports.createTemplate = createTemplate;
-	exports.registerViewModels = registerViewModels;
-	exports.createViewModels = createViewModels;
-	exports.createViewModel = createViewModel;
-	exports.useDefault = useDefault;
-	exports.registerIdentifiers = registerIdentifiers;
-	exports.getRegisteredTypes = getRegisteredTypes;
 
 /***/ },
 /* 1 */

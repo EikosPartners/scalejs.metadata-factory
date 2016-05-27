@@ -6,7 +6,6 @@ import moment from 'moment';
 import 'scalejs.expression-jsep';
 import scalejs from 'scalejs';
 var core = scalejs.core;
-
 core.mvvm.registerTemplates(view);
 
 var has = core.object.has,
@@ -382,9 +381,8 @@ ko.bindingHandlers.metadataFactory = {
     }
 
 }
-    
-    // legacy: registering to core
-    core.registerExtension({
+
+export default core.registerExtension({
         metadataFactory: {
             createTemplate,
             registerViewModels,
@@ -395,14 +393,3 @@ ko.bindingHandlers.metadataFactory = {
             getRegisteredTypes
         }
     })
-   
-    export {
-        createTemplate,
-        registerViewModels,
-        createViewModels,
-        createViewModel,
-        useDefault,
-        registerIdentifiers,
-        getRegisteredTypes
-    }
-   
