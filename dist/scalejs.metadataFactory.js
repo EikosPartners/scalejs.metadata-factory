@@ -49,6 +49,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.getRegisteredTypes = exports.registerIdentifiers = exports.useDefault = exports.createViewModel = exports.createViewModels = exports.registerViewModels = exports.createTemplate = undefined;
 
 	__webpack_require__(1);
 
@@ -433,7 +434,8 @@
 
 	};
 
-	exports.default = core.registerExtension({
+	// legacy: registering to core
+	core.registerExtension({
 	    metadataFactory: {
 	        createTemplate: createTemplate,
 	        registerViewModels: registerViewModels,
@@ -444,6 +446,14 @@
 	        getRegisteredTypes: getRegisteredTypes
 	    }
 	});
+
+	exports.createTemplate = createTemplate;
+	exports.registerViewModels = registerViewModels;
+	exports.createViewModels = createViewModels;
+	exports.createViewModel = createViewModel;
+	exports.useDefault = useDefault;
+	exports.registerIdentifiers = registerIdentifiers;
+	exports.getRegisteredTypes = getRegisteredTypes;
 
 /***/ },
 /* 1 */

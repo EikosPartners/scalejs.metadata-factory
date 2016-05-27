@@ -382,8 +382,9 @@ ko.bindingHandlers.metadataFactory = {
     }
 
 }
-
-export default core.registerExtension({
+    
+    // legacy: registering to core
+    core.registerExtension({
         metadataFactory: {
             createTemplate,
             registerViewModels,
@@ -394,3 +395,14 @@ export default core.registerExtension({
             getRegisteredTypes
         }
     })
+   
+    export {
+        createTemplate,
+        registerViewModels,
+        createViewModels,
+        createViewModel,
+        useDefault,
+        registerIdentifiers,
+        getRegisteredTypes
+    }
+   
