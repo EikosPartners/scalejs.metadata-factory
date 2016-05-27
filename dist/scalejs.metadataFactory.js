@@ -52,36 +52,34 @@
 
 	__webpack_require__(1);
 
-	var _scalejs = __webpack_require__(2);
-
-	var _scalejs2 = _interopRequireDefault(_scalejs);
-
-	var _knockout = __webpack_require__(9);
+	var _knockout = __webpack_require__(2);
 
 	var _knockout2 = _interopRequireDefault(_knockout);
 
-	var _lodash = __webpack_require__(10);
+	var _lodash = __webpack_require__(3);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _metadataFactory = __webpack_require__(11);
+	var _metadataFactory = __webpack_require__(4);
 
 	var _metadataFactory2 = _interopRequireDefault(_metadataFactory);
 
-	var _moment = __webpack_require__(12);
+	var _moment = __webpack_require__(5);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
-	__webpack_require__(13);
+	__webpack_require__(6);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	_scalejs2.default.mvvm.registerTemplates(_metadataFactory2.default);
+	var core = __webpack_require__(7);
 
-	var has = _scalejs2.default.object.has,
-	    is = _scalejs2.default.type.is,
+	core.mvvm.registerTemplates(_metadataFactory2.default);
+
+	var has = core.object.has,
+	    is = core.type.is,
 	    computed = _knockout2.default.computed,
-	    evaluate = _scalejs2.default.expression.evaluate,
+	    evaluate = core.expression.evaluate,
 	    observable = _knockout2.default.observable,
 	    observableArray = _knockout2.default.observableArray,
 	    viewModels = {
@@ -113,7 +111,7 @@
 	                        return context.getValue(id);
 	                    }
 	                    if (id === 'role') {
-	                        return _scalejs2.default.userservice.role();
+	                        return core.userservice.role();
 	                    }
 	                    return '';
 	                });
@@ -143,8 +141,8 @@
 	            metadata: metadata,
 	            // default getValue can grab from the store
 	            getValue: function getValue(id) {
-	                if (id === 'store' && _scalejs2.default.noticeboard.global) {
-	                    return _knockout2.default.unwrap(_scalejs2.default.noticeboard.global.dictionary);
+	                if (id === 'store' && core.noticeboard.global) {
+	                    return _knockout2.default.unwrap(core.noticeboard.global.dictionary);
 	                }
 	                if (id === '_') {
 	                    return _lodash2.default;
@@ -174,7 +172,7 @@
 
 	function createTemplate(metadata, context) {
 	    if (!metadata) {
-	        return _scalejs2.default.mvvm.template('metadata_loading_template');
+	        return core.mvvm.template('metadata_loading_template');
 	    }
 	    if (!Array.isArray(metadata)) {
 	        metadata = [metadata];
@@ -182,14 +180,14 @@
 
 	    var viewModels = !context ? createViewModels(metadata) : createViewModels.call(context, metadata);
 
-	    return _scalejs2.default.mvvm.template('metadata_items_template', viewModels);
+	    return core.mvvm.template('metadata_items_template', viewModels);
 	}
 
 	function defaultViewModel(node) {
 	    if (!useDefault) {
 	        return;
 	    }
-	    return _scalejs2.default.object.merge(node, {
+	    return core.object.merge(node, {
 	        template: 'metadata_default_template'
 	    });
 	}
@@ -206,11 +204,11 @@
 	            newContextProps[prop] = observable(node[prop]);
 	        }
 	    });
-	    _scalejs2.default.object.extend(this, newContextProps);
+	    core.object.extend(this, newContextProps);
 	}
 
 	function registerViewModels(newViewModels) {
-	    _scalejs2.default.object.extend(viewModels, newViewModels);
+	    core.object.extend(viewModels, newViewModels);
 	}
 
 	function getRegisteredTypes() {
@@ -218,7 +216,7 @@
 	}
 
 	function registerIdentifiers(ids) {
-	    _scalejs2.default.object.extend(identifiers, ids);
+	    core.object.extend(identifiers, ids);
 	}
 
 	function dispose(metadata) {
@@ -313,7 +311,7 @@
 	    //Add all templates to the schema
 	    var option;
 	    var otherTemplates = [];
-	    for (var key in _scalejs2.default.mvvm.getRegisteredTemplates()) {
+	    for (var key in core.mvvm.getRegisteredTemplates()) {
 	        if (key !== '') {
 	            if (schemas.hasOwnProperty(key)) {
 	                // Add extended templates
@@ -431,7 +429,7 @@
 
 	};
 
-	exports.default = _scalejs2.default.registerExtension({
+	exports.default = core.registerExtension({
 	    metadataFactory: {
 	        createTemplate: createTemplate,
 	        registerViewModels: registerViewModels,
@@ -451,11 +449,41 @@
 
 /***/ },
 /* 2 */
+/***/ function(module, exports) {
+
+	module.exports = require("knockout");
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = require("lodash");
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=\"metadata_items_template\">\r\n    <!-- ko template: { name: 'metadata_item_template', foreach: $data } -->\r\n\r\n    <!--/ko -->\r\n</div>\r\n\r\n<div id=\"metadata_item_template\">\r\n    <!-- ko comment: $data.template || $data.type + '_template' -->\r\n    <!-- /ko -->\r\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\r\n    <!-- ko template: $data.template || $data.type + '_template' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id=\"metadata_default_template\">\r\n    <div data-bind=\"text: JSON.stringify($data)\"></div>\r\n</div>\r\n\r\n<div id=\"metadata_loading_template\">\r\n    <div class=\"loader hexdots-loader\">\r\n    loading...\r\n    </div>\r\n</div>\r\n\r\n<div id=\"no_template\">    \r\n    <div data-bind=\"template: { name: 'metadata_items_template', data: mappedChildNodes}\"></div>\r\n</div>\r\n";
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	module.exports = require("moment");
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	module.exports = require("scalejs.expression-jsep");
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var _scalejsEs = __webpack_require__(3);
+	var _scalejsEs = __webpack_require__(8);
 
 	var _scalejsEs2 = _interopRequireDefault(_scalejsEs);
 
@@ -464,7 +492,7 @@
 	module.exports = _scalejsEs2.default;
 
 /***/ },
-/* 3 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -473,7 +501,7 @@
 	    value: true
 	});
 
-	var _scalejs = __webpack_require__(4);
+	var _scalejs = __webpack_require__(9);
 
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 
@@ -707,7 +735,7 @@
 	});
 
 /***/ },
-/* 4 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -716,19 +744,19 @@
 	    value: true
 	});
 
-	var _scalejsBase = __webpack_require__(5);
+	var _scalejsBase = __webpack_require__(10);
 
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 
-	var _scalejsBase3 = __webpack_require__(8);
+	var _scalejsBase3 = __webpack_require__(13);
 
 	var _scalejsBase4 = _interopRequireDefault(_scalejsBase3);
 
-	var _scalejsBase5 = __webpack_require__(6);
+	var _scalejsBase5 = __webpack_require__(11);
 
 	var _scalejsBase6 = _interopRequireDefault(_scalejsBase5);
 
-	var _scalejsBase7 = __webpack_require__(7);
+	var _scalejsBase7 = __webpack_require__(12);
 
 	var _scalejsBase8 = _interopRequireDefault(_scalejsBase7);
 
@@ -747,7 +775,7 @@
 	};
 
 /***/ },
-/* 5 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -756,7 +784,7 @@
 	    value: true
 	});
 
-	var _scalejsBase = __webpack_require__(6);
+	var _scalejsBase = __webpack_require__(11);
 
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 
@@ -868,7 +896,7 @@
 	};
 
 /***/ },
-/* 6 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -886,7 +914,7 @@
 	/*global define*/
 
 
-	var _scalejsBase = __webpack_require__(7);
+	var _scalejsBase = __webpack_require__(12);
 
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 
@@ -1114,7 +1142,7 @@
 	};
 
 /***/ },
-/* 7 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1288,7 +1316,7 @@
 	};
 
 /***/ },
-/* 8 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1297,7 +1325,7 @@
 	    value: true
 	});
 
-	var _scalejsBase = __webpack_require__(6);
+	var _scalejsBase = __webpack_require__(11);
 
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 
@@ -1421,36 +1449,6 @@
 	    /** */
 	    formatException: formatException
 	};
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	module.exports = require("knockout");
-
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	module.exports = require("lodash");
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	module.exports = "<div id=\"metadata_items_template\">\r\n    <!-- ko template: { name: 'metadata_item_template', foreach: $data } -->\r\n\r\n    <!--/ko -->\r\n</div>\r\n\r\n<div id=\"metadata_item_template\">\r\n    <!-- ko comment: $data.template || $data.type + '_template' -->\r\n    <!-- /ko -->\r\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\r\n    <!-- ko template: $data.template || $data.type + '_template' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id=\"metadata_default_template\">\r\n    <div data-bind=\"text: JSON.stringify($data)\"></div>\r\n</div>\r\n\r\n<div id=\"metadata_loading_template\">\r\n    <div class=\"loader hexdots-loader\">\r\n    loading...\r\n    </div>\r\n</div>\r\n\r\n<div id=\"no_template\">    \r\n    <div data-bind=\"template: { name: 'metadata_items_template', data: mappedChildNodes}\"></div>\r\n</div>\r\n";
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-	module.exports = require("moment");
-
-/***/ },
-/* 13 */
-/***/ function(module, exports) {
-
-	module.exports = require("scalejs.expression-jsep");
 
 /***/ }
 /******/ ]);
