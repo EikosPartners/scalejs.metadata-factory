@@ -1,4 +1,4 @@
-import core from 'scalejs';
+import core from 'scalejs.core';
 import ko from 'knockout';
 import _ from 'lodash';
 import view from 'html!./views/metadataFactory.html';
