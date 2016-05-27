@@ -1,9 +1,9 @@
+import 'scalejs.mvvm';
 import core from 'scalejs.core';
 import ko from 'knockout';
 import _ from 'lodash';
 import view from 'html!./views/metadataFactory.html';
 import moment from 'moment';
-import 'scalejs.mvvm';
 import 'scalejs.expression-jsep';
 
 core.mvvm.registerTemplates(view);

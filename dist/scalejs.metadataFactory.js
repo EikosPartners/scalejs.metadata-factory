@@ -50,27 +50,27 @@
 	    value: true
 	});
 
-	var _scalejs = __webpack_require__(1);
+	__webpack_require__(1);
+
+	var _scalejs = __webpack_require__(2);
 
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 
-	var _knockout = __webpack_require__(8);
+	var _knockout = __webpack_require__(9);
 
 	var _knockout2 = _interopRequireDefault(_knockout);
 
-	var _lodash = __webpack_require__(9);
+	var _lodash = __webpack_require__(10);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _metadataFactory = __webpack_require__(10);
+	var _metadataFactory = __webpack_require__(11);
 
 	var _metadataFactory2 = _interopRequireDefault(_metadataFactory);
 
-	var _moment = __webpack_require__(11);
+	var _moment = __webpack_require__(12);
 
 	var _moment2 = _interopRequireDefault(_moment);
-
-	__webpack_require__(12);
 
 	__webpack_require__(13);
 
@@ -445,11 +445,17 @@
 
 /***/ },
 /* 1 */
+/***/ function(module, exports) {
+
+	module.exports = require("scalejs.mvvm");
+
+/***/ },
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var _scalejsEs = __webpack_require__(2);
+	var _scalejsEs = __webpack_require__(3);
 
 	var _scalejsEs2 = _interopRequireDefault(_scalejsEs);
 
@@ -458,7 +464,7 @@
 	module.exports = _scalejsEs2.default;
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -467,7 +473,7 @@
 	    value: true
 	});
 
-	var _scalejs = __webpack_require__(3);
+	var _scalejs = __webpack_require__(4);
 
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 
@@ -701,7 +707,7 @@
 	});
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -710,19 +716,19 @@
 	    value: true
 	});
 
-	var _scalejsBase = __webpack_require__(4);
+	var _scalejsBase = __webpack_require__(5);
 
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 
-	var _scalejsBase3 = __webpack_require__(7);
+	var _scalejsBase3 = __webpack_require__(8);
 
 	var _scalejsBase4 = _interopRequireDefault(_scalejsBase3);
 
-	var _scalejsBase5 = __webpack_require__(5);
+	var _scalejsBase5 = __webpack_require__(6);
 
 	var _scalejsBase6 = _interopRequireDefault(_scalejsBase5);
 
-	var _scalejsBase7 = __webpack_require__(6);
+	var _scalejsBase7 = __webpack_require__(7);
 
 	var _scalejsBase8 = _interopRequireDefault(_scalejsBase7);
 
@@ -741,7 +747,7 @@
 	};
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -750,7 +756,7 @@
 	    value: true
 	});
 
-	var _scalejsBase = __webpack_require__(5);
+	var _scalejsBase = __webpack_require__(6);
 
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 
@@ -862,7 +868,7 @@
 	};
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -880,7 +886,7 @@
 	/*global define*/
 
 
-	var _scalejsBase = __webpack_require__(6);
+	var _scalejsBase = __webpack_require__(7);
 
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 
@@ -1108,7 +1114,7 @@
 	};
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1282,7 +1288,7 @@
 	};
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1291,7 +1297,7 @@
 	    value: true
 	});
 
-	var _scalejsBase = __webpack_require__(5);
+	var _scalejsBase = __webpack_require__(6);
 
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 
@@ -1417,34 +1423,28 @@
 	};
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = require("knockout");
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	module.exports = require("lodash");
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = "<div id=\"metadata_items_template\">\r\n    <!-- ko template: { name: 'metadata_item_template', foreach: $data } -->\r\n\r\n    <!--/ko -->\r\n</div>\r\n\r\n<div id=\"metadata_item_template\">\r\n    <!-- ko comment: $data.template || $data.type + '_template' -->\r\n    <!-- /ko -->\r\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\r\n    <!-- ko template: $data.template || $data.type + '_template' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id=\"metadata_default_template\">\r\n    <div data-bind=\"text: JSON.stringify($data)\"></div>\r\n</div>\r\n\r\n<div id=\"metadata_loading_template\">\r\n    <div class=\"loader hexdots-loader\">\r\n    loading...\r\n    </div>\r\n</div>\r\n\r\n<div id=\"no_template\">    \r\n    <div data-bind=\"template: { name: 'metadata_items_template', data: mappedChildNodes}\"></div>\r\n</div>\r\n";
 
 /***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	module.exports = require("moment");
-
-/***/ },
 /* 12 */
 /***/ function(module, exports) {
 
-	module.exports = require("scalejs.mvvm");
+	module.exports = require("moment");
 
 /***/ },
 /* 13 */
