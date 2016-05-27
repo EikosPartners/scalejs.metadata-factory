@@ -4,8 +4,8 @@ import _ from 'lodash';
 import view from 'html!./views/metadataFactory.html';
 import moment from 'moment';
 import 'scalejs.expression-jsep';
-
-var core = require('scalejs.core');
+import scalejs from 'scalejs';
+var core = scalejs.core;
 
 core.mvvm.registerTemplates(view);
 
