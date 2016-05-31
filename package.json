@@ -1,6 +1,6 @@
 {
   "name": "scalejs.metadataFactory",
-  "main": "dist/scalejs.metadataFactory.min.js",
+  "main": "dist/scalejs.metadataFactory.js",
   "scripts": {
     "build": "webpack && uglifyjs dist/scalejs.metadataFactory.js --screw-ie8 -o dist/scalejs.metadataFactory.min.js"
   },
