@@ -19,7 +19,7 @@
     "moment": "^2.13.0",
     "scalejs": "git+https://github.com/EikosPartners/scalejs.git#es6",
     "scalejs.expression-jsep": "git+https://github.com/EikosPartners/scalejs.expression-jsep",
-    "scalejs.mvvm": "git+https://github.com/EikosPartners/scalejs.mvvm.git",
+    "scalejs.mvvm": "git+https://github.com/EikosPartners/scalejs.mvvm.git#es6",
     "webpack": "^1.13.1"
   }
 }
