@@ -70,9 +70,9 @@
 
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 
-	__webpack_require__(14);
+	__webpack_require__(15);
 
-	var _scalejs3 = __webpack_require__(15);
+	var _scalejs3 = __webpack_require__(16);
 
 	var _scalejs4 = _interopRequireDefault(_scalejs3);
 
@@ -80,7 +80,7 @@
 
 	var _scalejs6 = _interopRequireDefault(_scalejs5);
 
-	__webpack_require__(16);
+	__webpack_require__(14);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1480,27 +1480,29 @@
 
 /***/ },
 /* 13 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+
+	__webpack_require__(14);
 
 /***/ },
 /* 14 */
 /***/ function(module, exports) {
 
-	module.exports = require("scalejs.expression-jsep");
+	module.exports = require("scalejs.mvvm");
 
 /***/ },
 /* 15 */
 /***/ function(module, exports) {
 
-	module.exports = require("scalejs");
+	module.exports = require("scalejs.expression-jsep");
 
 /***/ },
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = require("scalejs.mvvm");
+	module.exports = require("scalejs");
 
 /***/ }
 /******/ ]);
