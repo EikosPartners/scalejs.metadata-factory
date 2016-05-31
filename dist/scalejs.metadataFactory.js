@@ -50,38 +50,39 @@
 	    value: true
 	});
 
-	__webpack_require__(1);
-
-	var _knockout = __webpack_require__(2);
+	var _knockout = __webpack_require__(1);
 
 	var _knockout2 = _interopRequireDefault(_knockout);
 
-	var _lodash = __webpack_require__(3);
+	var _lodash = __webpack_require__(2);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _metadataFactory = __webpack_require__(4);
+	var _metadataFactory = __webpack_require__(3);
 
 	var _metadataFactory2 = _interopRequireDefault(_metadataFactory);
 
-	var _moment = __webpack_require__(5);
+	var _moment = __webpack_require__(4);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
-	__webpack_require__(6);
+	__webpack_require__(5);
 
-	var _scalejs = __webpack_require__(7);
+	var _scalejs = __webpack_require__(6);
 
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 
-	var _scalejs3 = __webpack_require__(8);
+	var _scalejs3 = __webpack_require__(7);
 
 	var _scalejs4 = _interopRequireDefault(_scalejs3);
 
+	__webpack_require__(14);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	//var core = scalejs.core;
 	_scalejs4.default.mvvm.registerTemplates(_metadataFactory2.default);
+	//var core = scalejs.core;
+
 
 	var has = _scalejs4.default.object.has,
 	    is = _scalejs4.default.type.is,
@@ -452,51 +453,45 @@
 /* 1 */
 /***/ function(module, exports) {
 
-	module.exports = require("scalejs.mvvm");
+	module.exports = require("knockout");
 
 /***/ },
 /* 2 */
 /***/ function(module, exports) {
 
-	module.exports = require("knockout");
+	module.exports = require("lodash");
 
 /***/ },
 /* 3 */
 /***/ function(module, exports) {
 
-	module.exports = require("lodash");
+	module.exports = "<div id=\"metadata_items_template\">\n    <!-- ko template: { name: 'metadata_item_template', foreach: $data } -->\n\n    <!--/ko -->\n</div>\n\n<div id=\"metadata_item_template\">\n    <!-- ko comment: $data.template || $data.type + '_template' -->\n    <!-- /ko -->\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\n    <!-- ko template: $data.template || $data.type + '_template' -->\n    <!-- /ko -->\n    <!-- /ko -->\n</div>\n\n<div id=\"metadata_default_template\">\n    <div data-bind=\"text: JSON.stringify($data)\"></div>\n</div>\n\n<div id=\"metadata_loading_template\">\n    <div class=\"loader hexdots-loader\">\n    loading...\n    </div>\n</div>\n\n<div id=\"no_template\">    \n    <div data-bind=\"template: { name: 'metadata_items_template', data: mappedChildNodes}\"></div>\n</div>\n";
 
 /***/ },
 /* 4 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"metadata_items_template\">\n    <!-- ko template: { name: 'metadata_item_template', foreach: $data } -->\n\n    <!--/ko -->\n</div>\n\n<div id=\"metadata_item_template\">\n    <!-- ko comment: $data.template || $data.type + '_template' -->\n    <!-- /ko -->\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\n    <!-- ko template: $data.template || $data.type + '_template' -->\n    <!-- /ko -->\n    <!-- /ko -->\n</div>\n\n<div id=\"metadata_default_template\">\n    <div data-bind=\"text: JSON.stringify($data)\"></div>\n</div>\n\n<div id=\"metadata_loading_template\">\n    <div class=\"loader hexdots-loader\">\n    loading...\n    </div>\n</div>\n\n<div id=\"no_template\">    \n    <div data-bind=\"template: { name: 'metadata_items_template', data: mappedChildNodes}\"></div>\n</div>\n";
+	module.exports = require("moment");
 
 /***/ },
 /* 5 */
 /***/ function(module, exports) {
 
-	module.exports = require("moment");
+	module.exports = require("scalejs.expression-jsep");
 
 /***/ },
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = require("scalejs.expression-jsep");
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
 	module.exports = require("scalejs");
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var _scalejsEs = __webpack_require__(9);
+	var _scalejsEs = __webpack_require__(8);
 
 	var _scalejsEs2 = _interopRequireDefault(_scalejsEs);
 
@@ -505,7 +500,7 @@
 	module.exports = _scalejsEs2.default;
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -514,7 +509,7 @@
 	    value: true
 	});
 
-	var _scalejs = __webpack_require__(10);
+	var _scalejs = __webpack_require__(9);
 
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 
@@ -748,7 +743,7 @@
 	});
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -757,19 +752,19 @@
 	    value: true
 	});
 
-	var _scalejsBase = __webpack_require__(11);
+	var _scalejsBase = __webpack_require__(10);
 
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 
-	var _scalejsBase3 = __webpack_require__(14);
+	var _scalejsBase3 = __webpack_require__(13);
 
 	var _scalejsBase4 = _interopRequireDefault(_scalejsBase3);
 
-	var _scalejsBase5 = __webpack_require__(12);
+	var _scalejsBase5 = __webpack_require__(11);
 
 	var _scalejsBase6 = _interopRequireDefault(_scalejsBase5);
 
-	var _scalejsBase7 = __webpack_require__(13);
+	var _scalejsBase7 = __webpack_require__(12);
 
 	var _scalejsBase8 = _interopRequireDefault(_scalejsBase7);
 
@@ -788,7 +783,7 @@
 	};
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -797,7 +792,7 @@
 	    value: true
 	});
 
-	var _scalejsBase = __webpack_require__(12);
+	var _scalejsBase = __webpack_require__(11);
 
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 
@@ -909,7 +904,7 @@
 	};
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -927,7 +922,7 @@
 	/*global define*/
 
 
-	var _scalejsBase = __webpack_require__(13);
+	var _scalejsBase = __webpack_require__(12);
 
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 
@@ -1155,7 +1150,7 @@
 	};
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1329,7 +1324,7 @@
 	};
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1338,7 +1333,7 @@
 	    value: true
 	});
 
-	var _scalejsBase = __webpack_require__(12);
+	var _scalejsBase = __webpack_require__(11);
 
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 
@@ -1462,6 +1457,12 @@
 	    /** */
 	    formatException: formatException
 	};
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	module.exports = require("scalejs.mvvm");
 
 /***/ }
 /******/ ]);
