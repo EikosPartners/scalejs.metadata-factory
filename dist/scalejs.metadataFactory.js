@@ -70,9 +70,7 @@
 
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 
-	__webpack_require__(15);
-
-	var _scalejs3 = __webpack_require__(16);
+	var _scalejs3 = __webpack_require__(15);
 
 	var _scalejs4 = _interopRequireDefault(_scalejs3);
 
@@ -84,6 +82,8 @@
 
 	//var core = scalejs.core;
 	//import 'scalejs.mvvm';
+
+	//import 'scalejs.expression-jsep';
 	_scalejs6.default.mvvm.registerTemplates(_metadataFactory2.default);
 
 	var has = _scalejs6.default.object.has,
@@ -1492,12 +1492,6 @@
 
 /***/ },
 /* 15 */
-/***/ function(module, exports) {
-
-	module.exports = require("scalejs.expression-jsep");
-
-/***/ },
-/* 16 */
 /***/ function(module, exports) {
 
 	module.exports = require("scalejs");
