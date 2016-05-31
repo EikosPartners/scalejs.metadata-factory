@@ -84,7 +84,7 @@
 	//import 'scalejs.mvvm';
 
 	//import 'scalejs.expression-jsep';
-	_scalejs6.default.mvvm.registerTemplates(_metadataFactory2.default);
+	_scalejs2.default.mvvm.registerTemplates(_metadataFactory2.default);
 
 	var has = _scalejs6.default.object.has,
 	    is = _scalejs6.default.type.is,
