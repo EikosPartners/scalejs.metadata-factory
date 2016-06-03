@@ -43,8 +43,9 @@ _scalejs6.default.mvvm.registerTemplates(_metadataFactory2.default);
 var has = _scalejs6.default.object.has,
     is = _scalejs6.default.type.is,
     computed = _knockout2.default.computed,
-    evaluate = _scalejs6.default.expression.evaluate,
-    observable = _knockout2.default.observable,
+
+// evaluate = core.expression.evaluate,
+observable = _knockout2.default.observable,
     observableArray = _knockout2.default.observableArray,
     viewModels = {
     '': defaultViewModel,

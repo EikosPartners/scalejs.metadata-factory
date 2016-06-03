@@ -13,7 +13,7 @@ core.mvvm.registerTemplates(view);
 var has = core.object.has,
     is = core.type.is,
     computed = ko.computed,
-    evaluate = core.expression.evaluate,
+   // evaluate = core.expression.evaluate,
     observable = ko.observable,
     observableArray = ko.observableArray,
     viewModels = {
