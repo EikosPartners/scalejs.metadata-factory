@@ -1,6 +1,6 @@
 import ko from 'knockout';
 import _ from 'lodash';
-import view from 'html!./views/metadataFactory.html';
+import view from './views/metadataFactory.html';
 import moment from 'moment';
 import sandbox from 'scalejs.sandbox';
 //import 'scalejs.expression-jsep';
