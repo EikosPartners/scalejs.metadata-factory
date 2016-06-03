@@ -38,7 +38,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //import 'scalejs.mvvm';
 
 //import 'scalejs.expression-jsep';
-_scalejs2.default.mvvm.registerTemplates(_metadataFactory2.default);
+_scalejs6.default.mvvm.registerTemplates(_metadataFactory2.default);
 
 var has = _scalejs6.default.object.has,
     is = _scalejs6.default.type.is,
