@@ -1,4 +1,3 @@
-exports["metadataFactory"] =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -480,7 +479,7 @@ exports["metadataFactory"] =
 /* 5 */
 /***/ function(module, exports) {
 
-	module.exports = require("scalejs.sandbox");
+	module.exports = scalejs.sandbox;
 
 /***/ },
 /* 6 */
@@ -492,7 +491,7 @@ exports["metadataFactory"] =
 /* 7 */
 /***/ function(module, exports) {
 
-	module.exports = require("scalejs.core");
+	module.exports = scalejs.core;
 
 /***/ }
 /******/ ]);

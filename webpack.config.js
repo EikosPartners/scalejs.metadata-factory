@@ -5,16 +5,14 @@ module.exports = {
     resolve: {
         alias: {
             // scalejs
-            'scalejs.core': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.core.js'),
-            'scalejs.sandbox': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.sandbox.js'),
-            'scalejs.extensions' : path.join(__dirname, 'src/extensions/scalejs.extensions.js')
+            // 'scalejs.core': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.core.js'),
+            // 'scalejs.sandbox': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.sandbox.js'),
+            // 'scalejs.extensions' : path.join(__dirname, 'src/extensions/scalejs.extensions.js')
         }
     },
     output: {
         path: 'dist',
-        filename: 'scalejs.metadataFactory.js',
-        library: 'metadataFactory',
-        libraryTarget: 'commonjs'
+        filename: 'scalejs.metadataFactory.js'
     },
     externals: [nodeExternals(), 'scalejs.core', 'scalejs.sandbox', 'scalejs.extensions'],
     module: {
