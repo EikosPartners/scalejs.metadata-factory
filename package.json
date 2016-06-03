@@ -2,10 +2,13 @@
   "name": "scalejs.metadataFactory",
   "main": "dist/scalejs.metadataFactory.js",
   "scripts": {
-    "build": "webpack && uglifyjs dist/scalejs.metadataFactory.js --screw-ie8 -o dist/scalejs.metadataFactory.min.js"
+    "_build": "webpack && uglifyjs dist/scalejs.metadataFactory.js --screw-ie8 -o dist/scalejs.metadataFactory.min.js",
+    "build": "babel src --presets babel-preset-es2015 --out-dir dist"
   },
   "version": "0.0.1",
   "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-core": "^6.0.0",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
     "html-loader": "^0.4.3",
@@ -18,6 +21,7 @@
     "moment": "^2.13.0",
     "scalejs.expression-jsep": "git+https://github.com/EikosPartners/scalejs.expression-jsep",
     "scalejs.mvvm": "git+https://github.com/EikosPartners/scalejs.mvvm.git#develop",
+    "scalejs": "git+https://github.com/EikosPartners/scalejs.git#es6",
     "webpack": "^1.13.1"
   }
 }
