@@ -17,7 +17,7 @@
     "lodash": "^4.13.1",
     "moment": "^2.13.0",
     "scalejs.expression-jsep": "git+https://github.com/EikosPartners/scalejs.expression-jsep",
-    "scalejs.mvvm": "git+https://github.com/EikosPartners/scalejs.mvvm.git#es6",
+    "scalejs.mvvm": "git+https://github.com/EikosPartners/scalejs.mvvm.git#develop",
     "webpack": "^1.13.1"
   }
 }
