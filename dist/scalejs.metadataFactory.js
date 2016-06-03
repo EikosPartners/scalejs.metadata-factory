@@ -24,6 +24,8 @@ var _scalejs = require('scalejs.sandbox');
 
 var _scalejs2 = _interopRequireDefault(_scalejs);
 
+require('scalejs.expression-jsep');
+
 var _scalejs3 = require('scalejs');
 
 var _scalejs4 = _interopRequireDefault(_scalejs3);
@@ -34,18 +36,14 @@ var _scalejs6 = _interopRequireDefault(_scalejs5);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//var core = scalejs.core;
 //import 'scalejs.mvvm';
-
-//import 'scalejs.expression-jsep';
 _scalejs6.default.mvvm.registerTemplates(_metadataFactory2.default);
 
 var has = _scalejs6.default.object.has,
     is = _scalejs6.default.type.is,
     computed = _knockout2.default.computed,
-
-// evaluate = core.expression.evaluate,
-observable = _knockout2.default.observable,
+    evaluate = _scalejs6.default.expression.evaluate,
+    observable = _knockout2.default.observable,
     observableArray = _knockout2.default.observableArray,
     viewModels = {
     '': defaultViewModel,

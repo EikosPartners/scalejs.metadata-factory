@@ -1,8 +1,5 @@
-define([
-    'scalejs!core', 'scalejs!application'
-], function(
-    core
-) {
+import core from 'scalejs!core';
+import 'scalejs!application';
     var metadata = core.metadata;
 
     // For deeper testing, log to console
@@ -15,5 +12,5 @@ define([
         });
 
     });
-});
+
 

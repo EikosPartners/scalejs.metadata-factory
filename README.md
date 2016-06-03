@@ -8,7 +8,6 @@
 
 ## Build Files
 
-* run `npm install -g uglify-js`
 * Run `npm run build`
 
 
