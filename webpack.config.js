@@ -12,7 +12,9 @@ module.exports = {
     },
     output: {
         path: 'dist',
-        filename: "scalejs.metadataFactory.js"
+        filename: 'scalejs.metadataFactory.js',
+        library: 'metadataFactory',
+        libraryTarget: 'commonjs'
     },
     externals: [nodeExternals(), 'scalejs.core', 'scalejs.sandbox', 'scalejs.extensions'],
     module: {
