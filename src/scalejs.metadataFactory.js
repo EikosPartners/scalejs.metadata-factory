@@ -4,10 +4,9 @@ import view from './views/metadataFactory.html';
 import moment from 'moment';
 import sandbox from 'scalejs.sandbox';
 import 'scalejs.expression-jsep';
-import scalejs from 'scalejs';
 import core from 'scalejs.core';
+import 'scalejs.mvvm';
 
-//import 'scalejs.mvvm';
 core.mvvm.registerTemplates(view);
 
 var has = core.object.has,

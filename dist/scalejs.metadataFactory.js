@@ -26,23 +26,20 @@ var _scalejs2 = _interopRequireDefault(_scalejs);
 
 require('scalejs.expression-jsep');
 
-var _scalejs3 = require('scalejs');
+var _scalejs3 = require('scalejs.core');
 
 var _scalejs4 = _interopRequireDefault(_scalejs3);
 
-var _scalejs5 = require('scalejs.core');
-
-var _scalejs6 = _interopRequireDefault(_scalejs5);
+require('scalejs.mvvm');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//import 'scalejs.mvvm';
-_scalejs6.default.mvvm.registerTemplates(_metadataFactory2.default);
+_scalejs4.default.mvvm.registerTemplates(_metadataFactory2.default);
 
-var has = _scalejs6.default.object.has,
-    is = _scalejs6.default.type.is,
+var has = _scalejs4.default.object.has,
+    is = _scalejs4.default.type.is,
     computed = _knockout2.default.computed,
-    evaluate = _scalejs6.default.expression.evaluate,
+    evaluate = _scalejs4.default.expression.evaluate,
     observable = _knockout2.default.observable,
     observableArray = _knockout2.default.observableArray,
     viewModels = {
@@ -74,7 +71,7 @@ function createViewModel(node) {
                         return context.getValue(id);
                     }
                     if (id === 'role') {
-                        return _scalejs6.default.userservice.role();
+                        return _scalejs4.default.userservice.role();
                     }
                     return '';
                 });
@@ -104,8 +101,8 @@ function createViewModels(metadata) {
             metadata: metadata,
             // default getValue can grab from the store
             getValue: function getValue(id) {
-                if (id === 'store' && _scalejs6.default.noticeboard.global) {
-                    return _knockout2.default.unwrap(_scalejs6.default.noticeboard.global.dictionary);
+                if (id === 'store' && _scalejs4.default.noticeboard.global) {
+                    return _knockout2.default.unwrap(_scalejs4.default.noticeboard.global.dictionary);
                 }
                 if (id === '_') {
                     return _lodash2.default;
@@ -135,7 +132,7 @@ function createViewModels(metadata) {
 
 function createTemplate(metadata, context) {
     if (!metadata) {
-        return _scalejs6.default.mvvm.template('metadata_loading_template');
+        return _scalejs4.default.mvvm.template('metadata_loading_template');
     }
     if (!Array.isArray(metadata)) {
         metadata = [metadata];
@@ -143,14 +140,14 @@ function createTemplate(metadata, context) {
 
     var viewModels = !context ? createViewModels(metadata) : createViewModels.call(context, metadata);
 
-    return _scalejs6.default.mvvm.template('metadata_items_template', viewModels);
+    return _scalejs4.default.mvvm.template('metadata_items_template', viewModels);
 }
 
 function defaultViewModel(node) {
     if (!useDefault) {
         return;
     }
-    return _scalejs6.default.object.merge(node, {
+    return _scalejs4.default.object.merge(node, {
         template: 'metadata_default_template'
     });
 }
@@ -167,11 +164,11 @@ function contextViewModel(node) {
             newContextProps[prop] = observable(node[prop]);
         }
     });
-    _scalejs6.default.object.extend(this, newContextProps);
+    _scalejs4.default.object.extend(this, newContextProps);
 }
 
 function registerViewModels(newViewModels) {
-    _scalejs6.default.object.extend(viewModels, newViewModels);
+    _scalejs4.default.object.extend(viewModels, newViewModels);
 }
 
 function getRegisteredTypes() {
@@ -179,7 +176,7 @@ function getRegisteredTypes() {
 }
 
 function registerIdentifiers(ids) {
-    _scalejs6.default.object.extend(identifiers, ids);
+    _scalejs4.default.object.extend(identifiers, ids);
 }
 
 function dispose(metadata) {
@@ -274,7 +271,7 @@ function generateSchema() {
     //Add all templates to the schema
     var option;
     var otherTemplates = [];
-    for (var key in _scalejs6.default.mvvm.getRegisteredTemplates()) {
+    for (var key in _scalejs4.default.mvvm.getRegisteredTemplates()) {
         if (key !== '') {
             if (schemas.hasOwnProperty(key)) {
                 // Add extended templates
@@ -392,7 +389,7 @@ _knockout2.default.bindingHandlers.metadataFactory = {
 
 };
 
-exports.default = _scalejs6.default.registerExtension({
+exports.default = _scalejs4.default.registerExtension({
     metadataFactory: {
         createTemplate: createTemplate,
         registerViewModels: registerViewModels,
