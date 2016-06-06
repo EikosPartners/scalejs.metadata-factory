@@ -403,3 +403,4 @@ exports.default = _scalejs6.default.registerExtension({
         getRegisteredTypes: getRegisteredTypes
     }
 });
+//# sourceMappingURL=scalejs.metadataFactory.js.map
