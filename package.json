@@ -3,7 +3,7 @@
   "main": "dist/scalejs.metadataFactory.js",
   "scripts": {
     "build": "babel src --presets babel-preset-es2015 --out-dir dist --source-maps && npm run copy",
-    "copy": "copyup src/**/*.html dist"
+    "copy": "copyup src/**/*.html src/**/*.css dist"
   },
   "version": "0.0.1",
   "devDependencies": {
