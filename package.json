@@ -3,9 +3,10 @@
   "main": "dist/scalejs.metadataFactory.js",
   "scripts": {
     "build": "babel src --presets babel-preset-es2015 --out-dir dist --source-maps && npm run copy",
-    "copy": "copyup src/**/*.html src/**/*.css dist"
+    "copy": "copyup src/**/*.html src/**/*.css dist",
+    "postinstall": "rimraf ./node_modules"
   },
-  "version": "0.1.2",
+  "version": "0.1.4",
   "devDependencies": {
     "babel-cli": "^6.9.0",
     "babel-preset-es2015": "^6.9.0",
