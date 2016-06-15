@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.getRegisteredTypes = exports.registerIdentifiers = exports.useDefault = exports.createViewModel = exports.createViewModels = exports.registerViewModels = exports.createTemplate = undefined;
 
 var _knockout = require('knockout');
 
@@ -389,6 +390,13 @@ _knockout2.default.bindingHandlers.metadataFactory = {
 
 };
 
+exports.createTemplate = createTemplate;
+exports.registerViewModels = registerViewModels;
+exports.createViewModels = createViewModels;
+exports.createViewModel = createViewModel;
+exports.useDefault = useDefault;
+exports.registerIdentifiers = registerIdentifiers;
+exports.getRegisteredTypes = getRegisteredTypes;
 exports.default = _scalejs4.default.registerExtension({
     metadataFactory: {
         createTemplate: createTemplate,
