@@ -343,6 +343,8 @@ function generateSchema() {
     return schema;
 }
 
+_knockout2.default.bindingHandlers.metadataSync = {}; // optional for MD factory
+
 _knockout2.default.bindingHandlers.metadataFactory = {
     init: function init() {
         return {
@@ -352,6 +354,7 @@ _knockout2.default.bindingHandlers.metadataFactory = {
     update: function update(element, valueAccessor, allBindings, viewModel, bindingContext) {
 
         var metadata = _knockout2.default.unwrap(valueAccessor()).metadata ? _knockout2.default.unwrap(valueAccessor()).metadata : _knockout2.default.unwrap(valueAccessor()),
+            sync = allBindings().metadataSync,
             context = _knockout2.default.unwrap(valueAccessor()).context ? _knockout2.default.unwrap(valueAccessor()).context : null,
             prevMetadata;
 
@@ -364,7 +367,7 @@ _knockout2.default.bindingHandlers.metadataFactory = {
             }
         }
 
-        setTimeout(function () {
+        function applyMetadataBinding() {
             var metadataTemplate = createTemplate(metadata, context).template;
 
             disposeMetadata();
@@ -381,7 +384,13 @@ _knockout2.default.bindingHandlers.metadataFactory = {
                     disposeMetadata();
                 });
             }
-        });
+        }
+
+        if (metadataSync) {
+            applyMetadataBinding();
+        } else {
+            setTimeout(applyMetadataBinding);
+        }
     }
 
 };

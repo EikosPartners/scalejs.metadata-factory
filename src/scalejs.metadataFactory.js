@@ -325,6 +325,8 @@ function generateSchema() {
 
 }
 
+ko.bindingHandlers.metadataSync = {}; // optional for MD factory
+
 ko.bindingHandlers.metadataFactory = {
     init: function() {
         return {
@@ -341,6 +343,7 @@ ko.bindingHandlers.metadataFactory = {
 
 
         var metadata = ko.unwrap(valueAccessor()).metadata ? ko.unwrap(valueAccessor()).metadata : ko.unwrap(valueAccessor()),
+            sync = allBindings().metadataSync,
             context = ko.unwrap(valueAccessor()).context ? ko.unwrap(valueAccessor()).context : null,
             prevMetadata;
 
@@ -353,8 +356,7 @@ ko.bindingHandlers.metadataFactory = {
             }
         }
 
-
-        setTimeout(function() {
+        function applyMetadataBinding() {
             var metadataTemplate = createTemplate(metadata, context).template;
 
             disposeMetadata();
@@ -377,7 +379,13 @@ ko.bindingHandlers.metadataFactory = {
                     disposeMetadata();
                 });
             }
-        });
+        }
+
+        if (metadataSync) {
+            applyMetadataBinding();
+        } else {
+            setTimeout(applyMetadataBinding);
+        }
     }
 
 }
