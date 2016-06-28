@@ -359,9 +359,11 @@ _knockout2.default.bindingHandlers.metadataFactory = {
     },
     update: function update(element, valueAccessor, allBindings, viewModel, bindingContext) {
 
-        var metadata = _knockout2.default.unwrap(valueAccessor()).metadata ? _knockout2.default.unwrap(valueAccessor()).metadata : _knockout2.default.unwrap(valueAccessor()),
+        var value = _knockout2.default.unwrap(valueAccessor()) || {};
+
+        var metadata = value.metadata ? value.metadata : value,
             sync = allBindings().metadataSync,
-            context = _knockout2.default.unwrap(valueAccessor()).context ? _knockout2.default.unwrap(valueAccessor()).context : null,
+            context = value.context ? value.context : null,
             prevMetadata;
 
         function disposeMetadata() {

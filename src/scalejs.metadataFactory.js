@@ -347,9 +347,11 @@ ko.bindingHandlers.metadataFactory = {
     ) {
 
 
-        var metadata = ko.unwrap(valueAccessor()).metadata ? ko.unwrap(valueAccessor()).metadata : ko.unwrap(valueAccessor()),
+        var value = ko.unwrap(valueAccessor()) || {};
+
+        var metadata = value.metadata ? value.metadata : value,
             sync = allBindings().metadataSync,
-            context = ko.unwrap(valueAccessor()).context ? ko.unwrap(valueAccessor()).context : null,
+            context = value.context ? value.context : null,
             prevMetadata;
 
         function disposeMetadata() {
