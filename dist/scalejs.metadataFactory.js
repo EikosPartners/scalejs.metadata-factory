@@ -59,7 +59,13 @@ function createViewModel(node) {
     if (node && node.type === 'ignore') {
         console.log('ignored node ', node);
     } else {
-        var mappedNode = viewModels[node.type] ? viewModels[node.type].call(this, node) : defaultViewModel.call(this, node);
+        var mappedNode;
+        if (viewModels[node.type]) {
+            mappedNode = viewModels[node.type].call(this, node);
+        } else {
+            console.log('no viewModel of type ' + node.type + ' was found');
+            mappedNode = defaultViewModel.call(this, node);
+        }
 
         if (mappedNode && has(node.rendered)) {
             rendered = is(node.rendered, 'boolean') ? observable(node.rendered) : computed(function () {

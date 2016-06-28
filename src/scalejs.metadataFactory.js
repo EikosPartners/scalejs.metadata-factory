@@ -37,12 +37,17 @@ function createViewModel(node) {
     if (node && node.type === 'ignore') {
         console.log('ignored node ', node);
     } else {
-        var mappedNode = viewModels[node.type] ? viewModels[node.type].call(this, node) : defaultViewModel.call(this, node);
-
+        var mappedNode;
+        if (viewModels[node.type]) {
+            mappedNode = viewModels[node.type].call(this, node);
+        } else {
+            console.log('no viewModel of type ' + node.type + ' was found')
+            mappedNode = defaultViewModel.call(this, node);
+        }
 
         if (mappedNode && has(node.rendered)) {
-            rendered = is(node.rendered, 'boolean') ? observable(node.rendered) : computed(function() {
-                return evaluate(node.rendered, function(id) {
+            rendered = is(node.rendered, 'boolean') ? observable(node.rendered) : computed(function () {
+                return evaluate(node.rendered, function (id) {
                     if (context.getValue && has(context.getValue(id))) {
                         return context.getValue(id);
                     }
@@ -76,7 +81,7 @@ function createViewModels(metadata) {
         metadataContext = {
             metadata: metadata,
             // default getValue can grab from the store
-            getValue: function(id) {
+            getValue: function (id) {
                 if (id === 'store' && core.noticeboard.global) {
                     return ko.unwrap(core.noticeboard.global.dictionary);
                 }
@@ -84,12 +89,12 @@ function createViewModels(metadata) {
                     return _;
                 }
                 if (id == 'Date') {
-                    return function(d) {
+                    return function (d) {
                         return moment(d).toDate().getTime();
                     }
                 }
                 if (id == 'IncrementDate') {
-                    return function(d, t, s) {
+                    return function (d, t, s) {
                         return moment(d).add(t, s).toDate().getTime();
                     }
                 }
@@ -98,9 +103,9 @@ function createViewModels(metadata) {
         };
     }
 
-    return metadata.map(function(item) {
+    return metadata.map(function (item) {
         return createViewModel.call(metadataContext, item)
-    }).filter(function(vm) {
+    }).filter(function (vm) {
         // filter undefined or null from the viewmodels array
         return has(vm);
     });
@@ -130,7 +135,7 @@ function defaultViewModel(node) {
 
 function contextViewModel(node) {
     var newContextProps = {};
-    Object.keys(node).forEach(function(prop) {
+    Object.keys(node).forEach(function (prop) {
         if (prop === 'type') {
             return;
         }
@@ -157,7 +162,7 @@ function registerIdentifiers(ids) {
 
 function dispose(metadata) {
     // clean up clean up everybody everywhere
-    ko.unwrap(metadata).forEach(function(node) {
+    ko.unwrap(metadata).forEach(function (node) {
         if (node.dispose) {
             node.dispose();
         }
@@ -213,20 +218,20 @@ function generateSchema() {
             },
             'subObject': {
                 'allOf': [{
-                        // Base properties
-                        'type': 'object',
-                        'properties': {
-                            'template': {}, // makes sure template/type show up as options
-                            'type': {},
-                            'children': {
-                                '$ref': '#/definitions/children'
-                            },
-                            'options': {
-                                '$ref': '#/definitions/options'
-                            }
+                    // Base properties
+                    'type': 'object',
+                    'properties': {
+                        'template': {}, // makes sure template/type show up as options
+                        'type': {},
+                        'children': {
+                            '$ref': '#/definitions/children'
                         },
-                        'required': ['type']
+                        'options': {
+                            '$ref': '#/definitions/options'
+                        }
                     },
+                    'required': ['type']
+                },
                     // populates templates, types, and corresponding options
                     {
                         '$ref': '#/definitions/typeExt'
@@ -239,11 +244,11 @@ function generateSchema() {
         'oneOf': [{
             '$ref': '#/definitions/subObject'
         }, {
-            'type': 'array',
-            'items': {
-                '$ref': '#/definitions/subObject'
-            }
-        }]
+                'type': 'array',
+                'items': {
+                    '$ref': '#/definitions/subObject'
+                }
+            }]
     };
 
     //Add all templates to the schema
@@ -328,12 +333,12 @@ function generateSchema() {
 ko.bindingHandlers.metadataSync = {}; // optional for MD factory
 
 ko.bindingHandlers.metadataFactory = {
-    init: function() {
+    init: function () {
         return {
             controlsDescendantBindings: true
         };
     },
-    update: function(
+    update: function (
         element,
         valueAccessor,
         allBindings,
@@ -365,7 +370,7 @@ ko.bindingHandlers.metadataFactory = {
 
             ko.bindingHandlers.template.update(
                 element,
-                function() {
+                function () {
                     return metadataTemplate;
                 },
                 allBindings,
@@ -375,7 +380,7 @@ ko.bindingHandlers.metadataFactory = {
 
             // first time running - set dom node disposal
             if (!prevMetadata) {
-                ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
                     disposeMetadata();
                 });
             }
@@ -390,7 +395,18 @@ ko.bindingHandlers.metadataFactory = {
 
 }
 
-    export {
+export {
+createTemplate,
+registerViewModels,
+createViewModels,
+createViewModel,
+useDefault,
+registerIdentifiers,
+getRegisteredTypes
+}
+
+export default core.registerExtension({
+    metadataFactory: {
         createTemplate,
         registerViewModels,
         createViewModels,
@@ -399,15 +415,4 @@ ko.bindingHandlers.metadataFactory = {
         registerIdentifiers,
         getRegisteredTypes
     }
-        
-    export default core.registerExtension({
-            metadataFactory: {
-                createTemplate,
-                registerViewModels,
-                createViewModels,
-                createViewModel,
-                useDefault,
-                registerIdentifiers,
-                getRegisteredTypes
-            }
-        })
+})
