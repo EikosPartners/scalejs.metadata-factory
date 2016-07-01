@@ -1,20 +1,17 @@
+import { registerTemplates, registerBindings, getRegisteredTemplates, template } from 'scalejs.mvvm';
+import {observable, observableArray, computed} from 'knockout';
+import * as noticeboard from 'scalejs.noticeboard';
 import ko from 'knockout';
 import _ from 'lodash';
+
 import view from './views/metadataFactory.html';
 import moment from 'moment';
-import 'scalejs.expression-jsep';
-import core from 'scalejs.core';
-import 'scalejs.mvvm';
+import { evaluate } from 'scalejs.expression-jsep';
 
-core.mvvm.registerTemplates(view);
+import { get, is, has, merge } from 'scalejs';
+registerTemplates(view);
 
-var has = core.object.has,
-    is = core.type.is,
-    computed = ko.computed,
-    evaluate = core.expression.evaluate,
-    observable = ko.observable,
-    observableArray = ko.observableArray,
-    viewModels = {
+var viewModels = {
         '': defaultViewModel,
         context: contextViewModel
     },
@@ -51,9 +48,9 @@ function createViewModel(node) {
                     if (context.getValue && has(context.getValue(id))) {
                         return context.getValue(id);
                     }
-                    if (id === 'role') {
-                        return core.userservice.role();
-                    }
+                    //if (id === 'role') {
+                    //    return core.userservice.role();
+                    //}
                     return '';
                 })
             });
@@ -68,11 +65,6 @@ function createViewModel(node) {
 
 function createViewModels(metadata) {
     var metadataContext;
-
-    // if(!this || !this.metadata) {
-    //     console.warn('A new instance of metadata has been detected, therefore a new context will be created');
-    // }
-
     // allows all viewmodels created in the same instane of metadata
     // to share context (as long as createViewModels is called correctly)
     if (this && this.metadata) {
@@ -82,8 +74,8 @@ function createViewModels(metadata) {
             metadata: metadata,
             // default getValue can grab from the store
             getValue: function (id) {
-                if (id === 'store' && core.noticeboard.global) {
-                    return ko.unwrap(core.noticeboard.global.dictionary);
+                if (id === 'store' && noticeboard.dictonary) {
+                    return unwrap(noticeboard.dictionary);
                 }
                 if (id === '_') {
                     return _;
@@ -113,7 +105,7 @@ function createViewModels(metadata) {
 
 function createTemplate(metadata, context) {
     if (!metadata) {
-        return core.mvvm.template('metadata_loading_template');
+        return template('metadata_loading_template');
     }
     if (!Array.isArray(metadata)) {
         metadata = [metadata];
@@ -121,14 +113,14 @@ function createTemplate(metadata, context) {
 
     var viewModels = !context ? createViewModels(metadata) : createViewModels.call(context, metadata);
 
-    return core.mvvm.template('metadata_items_template', viewModels);
+    return template('metadata_items_template', viewModels);
 }
 
 function defaultViewModel(node) {
     if (!useDefault) {
         return;
     }
-    return core.object.merge(node, {
+    return merge(node, {
         template: 'metadata_default_template'
     });
 }
@@ -145,11 +137,11 @@ function contextViewModel(node) {
             newContextProps[prop] = observable(node[prop]);
         }
     });
-    core.object.extend(this, newContextProps);
+    extend(this, newContextProps);
 }
 
 function registerViewModels(newViewModels) {
-    core.object.extend(viewModels, newViewModels);
+    extend(viewModels, newViewModels);
 }
 
 function getRegisteredTypes() {
@@ -157,12 +149,12 @@ function getRegisteredTypes() {
 }
 
 function registerIdentifiers(ids) {
-    core.object.extend(identifiers, ids);
+    extend(identifiers, ids);
 }
 
 function dispose(metadata) {
     // clean up clean up everybody everywhere
-    ko.unwrap(metadata).forEach(function (node) {
+    unwrap(metadata).forEach(function (node) {
         if (node.dispose) {
             node.dispose();
         }
@@ -254,7 +246,7 @@ function generateSchema() {
     //Add all templates to the schema
     var option;
     var otherTemplates = [];
-    for (var key in core.mvvm.getRegisteredTemplates()) {
+    for (var key in getRegisteredTemplates()) {
         if (key !== '') {
             if (schemas.hasOwnProperty(key)) {
                 // Add extended templates
@@ -347,7 +339,7 @@ ko.bindingHandlers.metadataFactory = {
     ) {
 
 
-        var value = ko.unwrap(valueAccessor()) || {};
+        var value = unwrap(valueAccessor()) || {};
 
         var metadata = value.metadata ? value.metadata : value,
             sync = allBindings().metadataSync,
@@ -406,15 +398,3 @@ useDefault,
 registerIdentifiers,
 getRegisteredTypes
 }
-
-export default core.registerExtension({
-    metadataFactory: {
-        createTemplate,
-        registerViewModels,
-        createViewModels,
-        createViewModel,
-        useDefault,
-        registerIdentifiers,
-        getRegisteredTypes
-    }
-})

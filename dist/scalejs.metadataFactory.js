@@ -5,9 +5,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getRegisteredTypes = exports.registerIdentifiers = exports.useDefault = exports.createViewModel = exports.createViewModels = exports.registerViewModels = exports.createTemplate = undefined;
 
+var _scalejs = require('scalejs.mvvm');
+
 var _knockout = require('knockout');
 
 var _knockout2 = _interopRequireDefault(_knockout);
+
+var _scalejs2 = require('scalejs.noticeboard');
+
+var noticeboard = _interopRequireWildcard(_scalejs2);
 
 var _lodash = require('lodash');
 
@@ -21,25 +27,17 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
-require('scalejs.expression-jsep');
+var _scalejs3 = require('scalejs.expression-jsep');
 
-var _scalejs = require('scalejs.core');
+var _scalejs4 = require('scalejs');
 
-var _scalejs2 = _interopRequireDefault(_scalejs);
-
-require('scalejs.mvvm');
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_scalejs2.default.mvvm.registerTemplates(_metadataFactory2.default);
+(0, _scalejs.registerTemplates)(_metadataFactory2.default);
 
-var has = _scalejs2.default.object.has,
-    is = _scalejs2.default.type.is,
-    computed = _knockout2.default.computed,
-    evaluate = _scalejs2.default.expression.evaluate,
-    observable = _knockout2.default.observable,
-    observableArray = _knockout2.default.observableArray,
-    viewModels = {
+var viewModels = {
     '': defaultViewModel,
     context: contextViewModel
 },
@@ -48,10 +46,10 @@ var has = _scalejs2.default.object.has,
     useDefault = true;
 
 function createViewModel(node) {
-    var rendered = observable(true),
+    var rendered = (0, _knockout.observable)(true),
         context = this;
 
-    node = _lodash2.default.cloneDeep(node); //clone the node to stop mutation issues
+    node = (0, _lodash.cloneDeep)(node); //clone the node to stop mutation issues
 
     // if(!this || !this.metadata) {
     //     console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
@@ -67,15 +65,15 @@ function createViewModel(node) {
             mappedNode = defaultViewModel.call(this, node);
         }
 
-        if (mappedNode && has(node.rendered)) {
-            rendered = is(node.rendered, 'boolean') ? observable(node.rendered) : computed(function () {
-                return evaluate(node.rendered, function (id) {
-                    if (context.getValue && has(context.getValue(id))) {
+        if (mappedNode && (0, _scalejs4.has)(node.rendered)) {
+            rendered = (0, _scalejs4.is)(node.rendered, 'boolean') ? (0, _knockout.observable)(node.rendered) : (0, _knockout.computed)(function () {
+                return (0, _scalejs3.evaluate)(node.rendered, function (id) {
+                    if (context.getValue && (0, _scalejs4.has)(context.getValue(id))) {
                         return context.getValue(id);
                     }
-                    if (id === 'role') {
-                        return _scalejs2.default.userservice.role();
-                    }
+                    //if (id === 'role') {
+                    //    return core.userservice.role();
+                    //}
                     return '';
                 });
             });
@@ -90,11 +88,6 @@ function createViewModel(node) {
 
 function createViewModels(metadata) {
     var metadataContext;
-
-    // if(!this || !this.metadata) {
-    //     console.warn('A new instance of metadata has been detected, therefore a new context will be created');
-    // }
-
     // allows all viewmodels created in the same instane of metadata
     // to share context (as long as createViewModels is called correctly)
     if (this && this.metadata) {
@@ -104,8 +97,8 @@ function createViewModels(metadata) {
             metadata: metadata,
             // default getValue can grab from the store
             getValue: function getValue(id) {
-                if (id === 'store' && _scalejs2.default.noticeboard.global) {
-                    return _knockout2.default.unwrap(_scalejs2.default.noticeboard.global.dictionary);
+                if (id === 'store' && noticeboard.dictonary) {
+                    return unwrap(noticeboard.dictionary);
                 }
                 if (id === '_') {
                     return _lodash2.default;
@@ -129,13 +122,13 @@ function createViewModels(metadata) {
         return createViewModel.call(metadataContext, item);
     }).filter(function (vm) {
         // filter undefined or null from the viewmodels array
-        return has(vm);
+        return (0, _scalejs4.has)(vm);
     });
 }
 
 function createTemplate(metadata, context) {
     if (!metadata) {
-        return _scalejs2.default.mvvm.template('metadata_loading_template');
+        return (0, _scalejs.template)('metadata_loading_template');
     }
     if (!Array.isArray(metadata)) {
         metadata = [metadata];
@@ -143,14 +136,14 @@ function createTemplate(metadata, context) {
 
     var viewModels = !context ? createViewModels(metadata) : createViewModels.call(context, metadata);
 
-    return _scalejs2.default.mvvm.template('metadata_items_template', viewModels);
+    return (0, _scalejs.template)('metadata_items_template', viewModels);
 }
 
 function defaultViewModel(node) {
     if (!useDefault) {
         return;
     }
-    return _scalejs2.default.object.merge(node, {
+    return (0, _scalejs4.merge)(node, {
         template: 'metadata_default_template'
     });
 }
@@ -162,16 +155,16 @@ function contextViewModel(node) {
             return;
         }
         if (Array.isArray(node[prop])) {
-            newContextProps[prop] = observableArray(node[prop]);
+            newContextProps[prop] = (0, _knockout.observableArray)(node[prop]);
         } else {
-            newContextProps[prop] = observable(node[prop]);
+            newContextProps[prop] = (0, _knockout.observable)(node[prop]);
         }
     });
-    _scalejs2.default.object.extend(this, newContextProps);
+    extend(this, newContextProps);
 }
 
 function registerViewModels(newViewModels) {
-    _scalejs2.default.object.extend(viewModels, newViewModels);
+    extend(viewModels, newViewModels);
 }
 
 function getRegisteredTypes() {
@@ -179,12 +172,12 @@ function getRegisteredTypes() {
 }
 
 function registerIdentifiers(ids) {
-    _scalejs2.default.object.extend(identifiers, ids);
+    extend(identifiers, ids);
 }
 
 function dispose(metadata) {
     // clean up clean up everybody everywhere
-    _knockout2.default.unwrap(metadata).forEach(function (node) {
+    unwrap(metadata).forEach(function (node) {
         if (node.dispose) {
             node.dispose();
         }
@@ -274,7 +267,7 @@ function generateSchema() {
     //Add all templates to the schema
     var option;
     var otherTemplates = [];
-    for (var key in _scalejs2.default.mvvm.getRegisteredTemplates()) {
+    for (var key in (0, _scalejs.getRegisteredTemplates)()) {
         if (key !== '') {
             if (schemas.hasOwnProperty(key)) {
                 // Add extended templates
@@ -359,7 +352,7 @@ _knockout2.default.bindingHandlers.metadataFactory = {
     },
     update: function update(element, valueAccessor, allBindings, viewModel, bindingContext) {
 
-        var value = _knockout2.default.unwrap(valueAccessor()) || {};
+        var value = unwrap(valueAccessor()) || {};
 
         var metadata = value.metadata ? value.metadata : value,
             sync = allBindings().metadataSync,
@@ -410,15 +403,4 @@ exports.createViewModel = createViewModel;
 exports.useDefault = useDefault;
 exports.registerIdentifiers = registerIdentifiers;
 exports.getRegisteredTypes = getRegisteredTypes;
-exports.default = _scalejs2.default.registerExtension({
-    metadataFactory: {
-        createTemplate: createTemplate,
-        registerViewModels: registerViewModels,
-        createViewModels: createViewModels,
-        createViewModel: createViewModel,
-        useDefault: useDefault,
-        registerIdentifiers: registerIdentifiers,
-        getRegisteredTypes: getRegisteredTypes
-    }
-});
 //# sourceMappingURL=scalejs.metadataFactory.js.map
