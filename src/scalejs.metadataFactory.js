@@ -137,11 +137,11 @@ function contextViewModel(node) {
             newContextProps[prop] = observable(node[prop]);
         }
     });
-    extend(this, newContextProps);
+    _.extend(this, newContextProps);
 }
 
 function registerViewModels(newViewModels) {
-    extend(viewModels, newViewModels);
+    _.extend(viewModels, newViewModels);
 }
 
 function getRegisteredTypes() {
@@ -149,7 +149,7 @@ function getRegisteredTypes() {
 }
 
 function registerIdentifiers(ids) {
-    extend(identifiers, ids);
+    _.extend(identifiers, ids);
 }
 
 function dispose(metadata) {
