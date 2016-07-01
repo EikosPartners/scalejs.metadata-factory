@@ -49,7 +49,7 @@ function createViewModel(node) {
     var rendered = (0, _knockout.observable)(true),
         context = this;
 
-    node = (0, _lodash.cloneDeep)(node); //clone the node to stop mutation issues
+    node = _lodash2.default.cloneDeep(node); //clone the node to stop mutation issues
 
     // if(!this || !this.metadata) {
     //     console.warn('Creating viewmodel without metadata context. If metadata context is desired, call this function using "this"');
@@ -160,11 +160,11 @@ function contextViewModel(node) {
             newContextProps[prop] = (0, _knockout.observable)(node[prop]);
         }
     });
-    extend(this, newContextProps);
+    _lodash2.default.extend(this, newContextProps);
 }
 
 function registerViewModels(newViewModels) {
-    extend(viewModels, newViewModels);
+    _lodash2.default.extend(viewModels, newViewModels);
 }
 
 function getRegisteredTypes() {
@@ -172,7 +172,7 @@ function getRegisteredTypes() {
 }
 
 function registerIdentifiers(ids) {
-    extend(identifiers, ids);
+    _lodash2.default.extend(identifiers, ids);
 }
 
 function dispose(metadata) {
