@@ -75,7 +75,7 @@ function createViewModels(metadata) {
             // default getValue can grab from the store
             getValue: function (id) {
                 if (id === 'store' && noticeboard.dictonary) {
-                    return unwrap(noticeboard.dictionary);
+                    return ko.unwrap(noticeboard.dictionary);
                 }
                 if (id === '_') {
                     return _;
@@ -154,7 +154,7 @@ function registerIdentifiers(ids) {
 
 function dispose(metadata) {
     // clean up clean up everybody everywhere
-    unwrap(metadata).forEach(function (node) {
+    ko.unwrap(metadata).forEach(function (node) {
         if (node.dispose) {
             node.dispose();
         }
@@ -339,7 +339,7 @@ ko.bindingHandlers.metadataFactory = {
     ) {
 
 
-        var value = unwrap(valueAccessor()) || {};
+        var value = ko.unwrap(valueAccessor()) || {};
 
         var metadata = value.metadata ? value.metadata : value,
             sync = allBindings().metadataSync,

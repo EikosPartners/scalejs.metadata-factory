@@ -98,7 +98,7 @@ function createViewModels(metadata) {
             // default getValue can grab from the store
             getValue: function getValue(id) {
                 if (id === 'store' && noticeboard.dictonary) {
-                    return unwrap(noticeboard.dictionary);
+                    return _knockout2.default.unwrap(noticeboard.dictionary);
                 }
                 if (id === '_') {
                     return _lodash2.default;
@@ -177,7 +177,7 @@ function registerIdentifiers(ids) {
 
 function dispose(metadata) {
     // clean up clean up everybody everywhere
-    unwrap(metadata).forEach(function (node) {
+    _knockout2.default.unwrap(metadata).forEach(function (node) {
         if (node.dispose) {
             node.dispose();
         }
@@ -352,7 +352,7 @@ _knockout2.default.bindingHandlers.metadataFactory = {
     },
     update: function update(element, valueAccessor, allBindings, viewModel, bindingContext) {
 
-        var value = unwrap(valueAccessor()) || {};
+        var value = _knockout2.default.unwrap(valueAccessor()) || {};
 
         var metadata = value.metadata ? value.metadata : value,
             sync = allBindings().metadataSync,
