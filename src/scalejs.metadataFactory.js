@@ -381,7 +381,7 @@ ko.bindingHandlers.metadataFactory = {
         }
 
         if (sync) {
-            applyMetadataBinding();
+            ko.ignoreDependencies(applyMetadataBinding);
         } else {
             setTimeout(applyMetadataBinding);
         }

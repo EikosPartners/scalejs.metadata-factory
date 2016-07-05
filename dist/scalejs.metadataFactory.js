@@ -388,7 +388,7 @@ _knockout2.default.bindingHandlers.metadataFactory = {
         }
 
         if (sync) {
-            applyMetadataBinding();
+            _knockout2.default.ignoreDependencies(applyMetadataBinding);
         } else {
             setTimeout(applyMetadataBinding);
         }
