@@ -74,7 +74,7 @@ function createViewModels(metadata) {
             metadata: metadata,
             // default getValue can grab from the store
             getValue: function (id) {
-                if (id === 'store' && noticeboard.dictonary) {
+                if (id === 'store' && noticeboard.dictionary) {
                     return ko.unwrap(noticeboard.dictionary);
                 }
                 if (id === '_') {
