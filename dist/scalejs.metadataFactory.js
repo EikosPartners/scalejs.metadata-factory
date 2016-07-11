@@ -369,9 +369,8 @@ _knockout2.default.bindingHandlers.metadataFactory = {
         }
 
         function applyMetadataBinding() {
+            diposeMetadata();
             var metadataTemplate = createTemplate(metadata, context).template;
-
-            disposeMetadata();
 
             _knockout2.default.utils.domData.set(element, 'metadata', metadataTemplate.data);
 
