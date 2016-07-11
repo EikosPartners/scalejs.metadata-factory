@@ -356,7 +356,7 @@ ko.bindingHandlers.metadataFactory = {
         }
 
         function applyMetadataBinding() {
-            diposeMetadata();
+            disposeMetadata();
             var metadataTemplate = createTemplate(metadata, context).template;
 
             ko.utils.domData.set(element, 'metadata', metadataTemplate.data);
