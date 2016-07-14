@@ -66,17 +66,21 @@ function createViewModel(node) {
         }
 
         if (mappedNode && (0, _scalejs4.has)(node.rendered)) {
-            rendered = (0, _scalejs4.is)(node.rendered, 'boolean') ? (0, _knockout.observable)(node.rendered) : (0, _knockout.computed)(function () {
-                return (0, _scalejs3.evaluate)(node.rendered, function (id) {
-                    if (context.getValue && (0, _scalejs4.has)(context.getValue(id))) {
-                        return context.getValue(id);
-                    }
-                    //if (id === 'role') {
-                    //    return core.userservice.role();
-                    //}
-                    return '';
+            (function () {
+                var renderedExp = node.rendered;
+
+                rendered = (0, _scalejs4.is)(node.rendered, 'boolean') ? (0, _knockout.observable)(node.rendered) : (0, _knockout.computed)(function () {
+                    return (0, _scalejs3.evaluate)(renderedExp, function (id) {
+                        if (context.getValue && (0, _scalejs4.has)(context.getValue(id))) {
+                            return context.getValue(id);
+                        }
+                        //if (id === 'role') {
+                        //    return core.userservice.role();
+                        //}
+                        return '';
+                    });
                 });
-            });
+            })();
         }
         if (mappedNode) {
             mappedNode.type = mappedNode.type || node.type;

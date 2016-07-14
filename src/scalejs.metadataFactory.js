@@ -43,8 +43,10 @@ function createViewModel(node) {
         }
 
         if (mappedNode && has(node.rendered)) {
+            let renderedExp = node.rendered;
+
             rendered = is(node.rendered, 'boolean') ? observable(node.rendered) : computed(function () {
-                return evaluate(node.rendered, function (id) {
+                return evaluate(renderedExp, function (id) {
                     if (context.getValue && has(context.getValue(id))) {
                         return context.getValue(id);
                     }
