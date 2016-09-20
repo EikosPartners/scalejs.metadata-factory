@@ -15,6 +15,7 @@ var viewModels = {
         '': defaultViewModel,
         context: contextViewModel
     },
+    globalMetadata = observable(),
     schemas = {
 
     },
@@ -391,11 +392,12 @@ ko.bindingHandlers.metadataFactory = {
 }
 
 export {
-createTemplate,
-registerViewModels,
-createViewModels,
-createViewModel,
-useDefault,
-registerIdentifiers,
-getRegisteredTypes
+    createTemplate,
+    registerViewModels,
+    createViewModels,
+    createViewModel,
+    useDefault,
+    registerIdentifiers,
+    getRegisteredTypes,
+    globalMetadata
 }

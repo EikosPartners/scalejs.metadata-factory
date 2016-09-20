@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getRegisteredTypes = exports.registerIdentifiers = exports.useDefault = exports.createViewModel = exports.createViewModels = exports.registerViewModels = exports.createTemplate = undefined;
+exports.globalMetadata = exports.getRegisteredTypes = exports.registerIdentifiers = exports.useDefault = exports.createViewModel = exports.createViewModels = exports.registerViewModels = exports.createTemplate = undefined;
 
 var _scalejs = require('scalejs.mvvm');
 
@@ -41,6 +41,7 @@ var viewModels = {
     '': defaultViewModel,
     context: contextViewModel
 },
+    globalMetadata = (0, _knockout.observable)(),
     schemas = {},
     identifiers = {},
     useDefault = true;
@@ -406,4 +407,5 @@ exports.createViewModel = createViewModel;
 exports.useDefault = useDefault;
 exports.registerIdentifiers = registerIdentifiers;
 exports.getRegisteredTypes = getRegisteredTypes;
+exports.globalMetadata = globalMetadata;
 //# sourceMappingURL=scalejs.metadataFactory.js.map
