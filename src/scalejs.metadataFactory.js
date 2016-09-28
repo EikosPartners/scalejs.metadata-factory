@@ -15,7 +15,7 @@ var viewModels = {
         '': defaultViewModel,
         context: contextViewModel
     },
-    globalMetadata = observable(),
+    globalMetadata = observable({}),
     schemas = {
 
     },
