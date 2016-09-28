@@ -41,7 +41,7 @@ var viewModels = {
     '': defaultViewModel,
     context: contextViewModel
 },
-    globalMetadata = (0, _knockout.observable)(),
+    globalMetadata = (0, _knockout.observable)({}),
     schemas = {},
     identifiers = {},
     useDefault = true;
