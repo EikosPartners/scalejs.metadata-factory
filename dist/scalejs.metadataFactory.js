@@ -113,6 +113,9 @@ function createViewModels(metadata) {
                         return (0, _moment2.default)(d).toDate().getTime();
                     };
                 }
+                if (id === 'currentDateUTC') {
+                    return _moment2.default.utc().format();
+                }
                 if (id == 'IncrementDate') {
                     return function (d, t, s) {
                         return (0, _moment2.default)(d).add(t, s).toDate().getTime();
